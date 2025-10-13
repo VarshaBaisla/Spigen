@@ -1,0 +1,214 @@
+[2025-10-09 16:20:11,027] INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[2025-10-09 16:20:11,029] INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+[2025-10-09 16:23:18,458] INFO app Thread-2 (process_request_thread) : Batch: be655571-f223-4d56-92e5-1eab48d08b2c | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 16:23:18,778] ERROR app Thread-2 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:23:18,836] INFO app Thread-2 (process_request_thread) : Batch: be655571-f223-4d56-92e5-1eab48d08b2c | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File MTR_B2B.csv uploaded successfully
+[2025-10-09 16:23:18,975] ERROR app Thread-2 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:23:19,011] INFO app Thread-2 (process_request_thread) : Batch: be655571-f223-4d56-92e5-1eab48d08b2c | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_b2b
+[2025-10-09 16:23:19,144] ERROR app Thread-2 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:23:19,478] INFO app Thread-2 (process_request_thread) : Batch: be655571-f223-4d56-92e5-1eab48d08b2c | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 5258 | Message: File processed successfully
+[2025-10-09 16:23:19,606] ERROR app Thread-2 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:23:21,025] INFO app Thread-2 (process_request_thread) : Batch: be655571-f223-4d56-92e5-1eab48d08b2c | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_b2b
+[2025-10-09 16:23:21,108] ERROR app Thread-2 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:23:21,229] INFO app Thread-2 (process_request_thread) : Batch: be655571-f223-4d56-92e5-1eab48d08b2c | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_b2b truncated
+[2025-10-09 16:23:21,322] ERROR app Thread-2 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:23:21,342] INFO app Thread-2 (process_request_thread) : Batch: be655571-f223-4d56-92e5-1eab48d08b2c | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_b2b
+[2025-10-09 16:23:21,418] ERROR app Thread-2 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:24:06,126] INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[2025-10-09 16:24:06,126] INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+[2025-10-09 16:24:20,982] INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:24:20] "GET / HTTP/1.1" 200 -
+[2025-10-09 16:24:22,647] INFO werkzeug Thread-1 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:24:22] "GET /login HTTP/1.1" 200 -
+[2025-10-09 16:24:28,689] INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:24:28] "[32mPOST /login HTTP/1.1[0m" 302 -
+[2025-10-09 16:24:28,896] INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:24:28] "GET /upload HTTP/1.1" 200 -
+[2025-10-09 16:24:40,594] INFO app Thread-5 (process_request_thread) : Batch: 5c536a24-4781-4d3e-bb41-f49d55ad5c29 | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 16:24:40,728] ERROR app Thread-5 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:24:40,776] INFO app Thread-5 (process_request_thread) : Batch: 5c536a24-4781-4d3e-bb41-f49d55ad5c29 | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File MTR_B2B.csv uploaded successfully
+[2025-10-09 16:24:41,105] ERROR app Thread-5 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:24:41,201] INFO app Thread-5 (process_request_thread) : Batch: 5c536a24-4781-4d3e-bb41-f49d55ad5c29 | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_b2b
+[2025-10-09 16:24:41,347] ERROR app Thread-5 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:24:41,641] INFO app Thread-5 (process_request_thread) : Batch: 5c536a24-4781-4d3e-bb41-f49d55ad5c29 | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 5258 | Message: File processed successfully
+[2025-10-09 16:24:41,769] ERROR app Thread-5 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:24:44,468] INFO app Thread-5 (process_request_thread) : Batch: 5c536a24-4781-4d3e-bb41-f49d55ad5c29 | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_b2b
+[2025-10-09 16:24:44,885] ERROR app Thread-5 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:24:45,253] INFO app Thread-5 (process_request_thread) : Batch: 5c536a24-4781-4d3e-bb41-f49d55ad5c29 | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_b2b truncated
+[2025-10-09 16:24:45,451] ERROR app Thread-5 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:24:45,507] INFO app Thread-5 (process_request_thread) : Batch: 5c536a24-4781-4d3e-bb41-f49d55ad5c29 | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_b2b
+[2025-10-09 16:24:45,707] ERROR app Thread-5 (process_request_thread) : Failed to write to log table: relation "app_logs.import_logs" does not exist
+LINE 2:                 INSERT INTO app_logs.import_logs 
+                                    ^
+
+[2025-10-09 16:25:07,710] INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[2025-10-09 16:25:07,711] INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+[2025-10-09 16:25:13,144] INFO app Thread-1 (process_request_thread) : Batch: 28f4ad8f-d79e-4ffa-ab45-11726369ce56 | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 16:25:13,652] INFO app Thread-1 (process_request_thread) : Batch: 28f4ad8f-d79e-4ffa-ab45-11726369ce56 | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File MTR_B2B.csv uploaded successfully
+[2025-10-09 16:25:14,714] INFO app Thread-1 (process_request_thread) : Batch: 28f4ad8f-d79e-4ffa-ab45-11726369ce56 | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_b2b
+[2025-10-09 16:25:15,400] INFO app Thread-1 (process_request_thread) : Batch: 28f4ad8f-d79e-4ffa-ab45-11726369ce56 | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 5258 | Message: File processed successfully
+[2025-10-09 16:25:18,476] INFO app Thread-1 (process_request_thread) : Batch: 28f4ad8f-d79e-4ffa-ab45-11726369ce56 | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_b2b
+[2025-10-09 16:25:24,525] INFO app Thread-1 (process_request_thread) : Batch: 28f4ad8f-d79e-4ffa-ab45-11726369ce56 | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_b2b truncated
+[2025-10-09 16:25:25,192] INFO app Thread-1 (process_request_thread) : Batch: 28f4ad8f-d79e-4ffa-ab45-11726369ce56 | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_b2b
+[2025-10-09 16:26:23,850] INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[2025-10-09 16:26:23,851] INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+[2025-10-09 16:26:26,782] INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:26:26] "GET / HTTP/1.1" 200 -
+[2025-10-09 16:26:28,938] INFO werkzeug Thread-1 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:26:28] "GET /login HTTP/1.1" 200 -
+[2025-10-09 16:26:36,119] INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:26:36] "[32mPOST /login HTTP/1.1[0m" 302 -
+[2025-10-09 16:26:36,130] INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:26:36] "GET /upload HTTP/1.1" 200 -
+[2025-10-09 16:26:47,040] INFO app Thread-5 (process_request_thread) : Batch: e7c3d350-53d7-4da5-8903-a2a9fba5616b | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 16:26:47,328] INFO app Thread-5 (process_request_thread) : Batch: e7c3d350-53d7-4da5-8903-a2a9fba5616b | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File MTR_B2B.csv uploaded successfully
+[2025-10-09 16:26:47,502] INFO app Thread-5 (process_request_thread) : Batch: e7c3d350-53d7-4da5-8903-a2a9fba5616b | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_b2b
+[2025-10-09 16:26:47,879] INFO app Thread-5 (process_request_thread) : Batch: e7c3d350-53d7-4da5-8903-a2a9fba5616b | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 5258 | Message: File processed successfully
+[2025-10-09 16:26:49,042] INFO app Thread-5 (process_request_thread) : Batch: e7c3d350-53d7-4da5-8903-a2a9fba5616b | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_b2b
+[2025-10-09 16:26:49,555] INFO app Thread-5 (process_request_thread) : Batch: e7c3d350-53d7-4da5-8903-a2a9fba5616b | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_b2b truncated
+[2025-10-09 16:26:49,745] INFO app Thread-5 (process_request_thread) : Batch: e7c3d350-53d7-4da5-8903-a2a9fba5616b | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_b2b
+[2025-10-09 16:28:00,215] INFO app Thread-5 (process_request_thread) : Batch: e7c3d350-53d7-4da5-8903-a2a9fba5616b | Procedure: COPY | Step: insert_raw_data | Status: success | Records: 5258 | Message: Successfully copied 5258 records to stg_amz_b2b
+[2025-10-09 16:28:01,354] INFO app Thread-5 (process_request_thread) : Batch: e7c3d350-53d7-4da5-8903-a2a9fba5616b | Procedure: PROCEDURE | Step: sales_processing | Status: started | Records: 0 | Message: Starting sales data processing
+[2025-10-09 16:28:33,506] INFO app Thread-5 (process_request_thread) : Batch: e7c3d350-53d7-4da5-8903-a2a9fba5616b | Procedure: PROCEDURE | Step: sales_processing | Status: success | Records: 0 | Message: Sales data processed successfully
+[2025-10-09 16:28:33,669] INFO app Thread-5 (process_request_thread) : Batch: e7c3d350-53d7-4da5-8903-a2a9fba5616b | Procedure: UPLOAD | Step: complete | Status: success | Records: 5258 | Message: Complete import process finished successfully
+[2025-10-09 16:28:33,765] INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:28:33] "[32mPOST /upload HTTP/1.1[0m" 302 -
+[2025-10-09 16:28:33,791] INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:28:33] "GET /upload HTTP/1.1" 200 -
+[2025-10-09 16:29:00,320] INFO app Thread-8 (process_request_thread) : Batch: 5ad3fdb1-7e0c-45e0-8b08-0f013501b5c0 | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 16:29:02,004] INFO app Thread-8 (process_request_thread) : Batch: 5ad3fdb1-7e0c-45e0-8b08-0f013501b5c0 | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File MTR_B2C.csv uploaded successfully
+[2025-10-09 16:29:02,200] INFO app Thread-8 (process_request_thread) : Batch: 5ad3fdb1-7e0c-45e0-8b08-0f013501b5c0 | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_b2c
+[2025-10-09 16:29:04,897] INFO app Thread-8 (process_request_thread) : Batch: 5ad3fdb1-7e0c-45e0-8b08-0f013501b5c0 | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 127735 | Message: File processed successfully
+[2025-10-09 16:29:23,527] INFO app Thread-8 (process_request_thread) : Batch: 5ad3fdb1-7e0c-45e0-8b08-0f013501b5c0 | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_b2c
+[2025-10-09 16:29:23,659] INFO app Thread-8 (process_request_thread) : Batch: 5ad3fdb1-7e0c-45e0-8b08-0f013501b5c0 | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_b2c truncated
+[2025-10-09 16:29:23,729] INFO app Thread-8 (process_request_thread) : Batch: 5ad3fdb1-7e0c-45e0-8b08-0f013501b5c0 | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_b2c
+[2025-10-09 16:30:10,632] INFO app Thread-8 (process_request_thread) : Batch: 5ad3fdb1-7e0c-45e0-8b08-0f013501b5c0 | Procedure: COPY | Step: insert_raw_data | Status: success | Records: 127735 | Message: Successfully copied 127735 records to stg_amz_b2c
+[2025-10-09 16:30:11,269] INFO app Thread-8 (process_request_thread) : Batch: 5ad3fdb1-7e0c-45e0-8b08-0f013501b5c0 | Procedure: PROCEDURE | Step: sales_processing | Status: started | Records: 0 | Message: Starting sales data processing
+[2025-10-09 16:30:37,665] INFO app Thread-8 (process_request_thread) : Batch: 5ad3fdb1-7e0c-45e0-8b08-0f013501b5c0 | Procedure: PROCEDURE | Step: sales_processing | Status: success | Records: 0 | Message: Sales data processed successfully
+[2025-10-09 16:30:38,617] INFO app Thread-8 (process_request_thread) : Batch: 5ad3fdb1-7e0c-45e0-8b08-0f013501b5c0 | Procedure: UPLOAD | Step: complete | Status: success | Records: 127735 | Message: Complete import process finished successfully
+[2025-10-09 16:30:39,081] INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:30:39] "[32mPOST /upload HTTP/1.1[0m" 302 -
+[2025-10-09 16:30:39,285] INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:30:39] "GET /upload HTTP/1.1" 200 -
+[2025-10-09 16:32:09,261] INFO app Thread-11 (process_request_thread) : Batch: 4624472b-52d0-4111-a584-24bfb404bf26 | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 16:32:09,430] INFO app Thread-11 (process_request_thread) : Batch: 4624472b-52d0-4111-a584-24bfb404bf26 | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File AMZ_Payout_Apr_2024.csv uploaded successfully
+[2025-10-09 16:32:09,498] INFO app Thread-11 (process_request_thread) : Batch: 4624472b-52d0-4111-a584-24bfb404bf26 | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_payout
+[2025-10-09 16:32:51,774] INFO app Thread-11 (process_request_thread) : Batch: 4624472b-52d0-4111-a584-24bfb404bf26 | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 139831 | Message: File processed successfully
+[2025-10-09 16:32:57,100] INFO app Thread-11 (process_request_thread) : Batch: 4624472b-52d0-4111-a584-24bfb404bf26 | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_payout
+[2025-10-09 16:32:57,404] INFO app Thread-11 (process_request_thread) : Batch: 4624472b-52d0-4111-a584-24bfb404bf26 | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_payout truncated
+[2025-10-09 16:32:58,569] INFO app Thread-11 (process_request_thread) : Batch: 4624472b-52d0-4111-a584-24bfb404bf26 | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_payout
+[2025-10-09 16:35:33,230] INFO app Thread-11 (process_request_thread) : Batch: 4624472b-52d0-4111-a584-24bfb404bf26 | Procedure: COPY | Step: insert_raw_data | Status: success | Records: 139831 | Message: Successfully copied 139831 records to stg_amz_payout
+[2025-10-09 16:35:33,341] INFO app Thread-11 (process_request_thread) : Batch: 4624472b-52d0-4111-a584-24bfb404bf26 | Procedure: PROCEDURE | Step: payout_processing | Status: started | Records: 0 | Message: Starting payout data processing
+[2025-10-09 16:36:31,116] INFO app Thread-11 (process_request_thread) : Batch: 4624472b-52d0-4111-a584-24bfb404bf26 | Procedure: PROCEDURE | Step: payout_processing | Status: success | Records: 0 | Message: Payout data processed successfully
+[2025-10-09 16:36:31,366] INFO app Thread-11 (process_request_thread) : Batch: 4624472b-52d0-4111-a584-24bfb404bf26 | Procedure: UPLOAD | Step: complete | Status: success | Records: 139831 | Message: Complete import process finished successfully
+[2025-10-09 16:36:31,571] INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:36:31] "[32mPOST /upload HTTP/1.1[0m" 302 -
+[2025-10-09 16:36:31,659] INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:36:31] "GET /upload HTTP/1.1" 200 -
+[2025-10-09 16:49:44,957] INFO app Thread-15 (process_request_thread) : Batch: a80bbcac-385c-4d4d-ac88-2cf5964156ae | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 16:49:45,175] INFO app Thread-15 (process_request_thread) : Batch: a80bbcac-385c-4d4d-ac88-2cf5964156ae | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File MTR_B2B.csv uploaded successfully
+[2025-10-09 16:49:45,251] INFO app Thread-15 (process_request_thread) : Batch: a80bbcac-385c-4d4d-ac88-2cf5964156ae | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_b2b
+[2025-10-09 16:49:45,485] INFO app Thread-15 (process_request_thread) : Batch: a80bbcac-385c-4d4d-ac88-2cf5964156ae | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 5687 | Message: File processed successfully
+[2025-10-09 16:49:47,182] INFO app Thread-15 (process_request_thread) : Batch: a80bbcac-385c-4d4d-ac88-2cf5964156ae | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_b2b
+[2025-10-09 16:49:47,446] INFO app Thread-15 (process_request_thread) : Batch: a80bbcac-385c-4d4d-ac88-2cf5964156ae | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_b2b truncated
+[2025-10-09 16:49:47,564] INFO app Thread-15 (process_request_thread) : Batch: a80bbcac-385c-4d4d-ac88-2cf5964156ae | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_b2b
+[2025-10-09 16:50:24,332] INFO app Thread-15 (process_request_thread) : Batch: a80bbcac-385c-4d4d-ac88-2cf5964156ae | Procedure: COPY | Step: insert_raw_data | Status: success | Records: 5687 | Message: Successfully copied 5687 records to stg_amz_b2b
+[2025-10-09 16:50:24,686] INFO app Thread-15 (process_request_thread) : Batch: a80bbcac-385c-4d4d-ac88-2cf5964156ae | Procedure: PROCEDURE | Step: sales_processing | Status: started | Records: 0 | Message: Starting sales data processing
+[2025-10-09 16:51:02,595] INFO app Thread-15 (process_request_thread) : Batch: a80bbcac-385c-4d4d-ac88-2cf5964156ae | Procedure: PROCEDURE | Step: sales_processing | Status: success | Records: 0 | Message: Sales data processed successfully
+[2025-10-09 16:51:02,879] INFO app Thread-15 (process_request_thread) : Batch: a80bbcac-385c-4d4d-ac88-2cf5964156ae | Procedure: UPLOAD | Step: complete | Status: success | Records: 5687 | Message: Complete import process finished successfully
+[2025-10-09 16:51:03,162] INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:51:03] "[32mPOST /upload HTTP/1.1[0m" 302 -
+[2025-10-09 16:51:03,415] INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:51:03] "GET /upload HTTP/1.1" 200 -
+[2025-10-09 16:51:18,506] INFO app Thread-18 (process_request_thread) : Batch: ab847091-fe80-4ef5-8b2e-4fefa89e6cdf | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 16:51:18,831] INFO app Thread-18 (process_request_thread) : Batch: ab847091-fe80-4ef5-8b2e-4fefa89e6cdf | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File MTR_B2C.csv uploaded successfully
+[2025-10-09 16:51:18,926] INFO app Thread-18 (process_request_thread) : Batch: ab847091-fe80-4ef5-8b2e-4fefa89e6cdf | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_b2c
+[2025-10-09 16:51:23,217] INFO app Thread-18 (process_request_thread) : Batch: ab847091-fe80-4ef5-8b2e-4fefa89e6cdf | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 157448 | Message: File processed successfully
+[2025-10-09 16:51:54,667] INFO app Thread-18 (process_request_thread) : Batch: ab847091-fe80-4ef5-8b2e-4fefa89e6cdf | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_b2c
+[2025-10-09 16:51:54,877] INFO app Thread-18 (process_request_thread) : Batch: ab847091-fe80-4ef5-8b2e-4fefa89e6cdf | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_b2c truncated
+[2025-10-09 16:51:54,947] INFO app Thread-18 (process_request_thread) : Batch: ab847091-fe80-4ef5-8b2e-4fefa89e6cdf | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_b2c
+[2025-10-09 16:52:51,072] INFO app Thread-18 (process_request_thread) : Batch: ab847091-fe80-4ef5-8b2e-4fefa89e6cdf | Procedure: COPY | Step: insert_raw_data | Status: success | Records: 157448 | Message: Successfully copied 157448 records to stg_amz_b2c
+[2025-10-09 16:52:51,276] INFO app Thread-18 (process_request_thread) : Batch: ab847091-fe80-4ef5-8b2e-4fefa89e6cdf | Procedure: PROCEDURE | Step: sales_processing | Status: started | Records: 0 | Message: Starting sales data processing
+[2025-10-09 16:53:20,171] INFO app Thread-18 (process_request_thread) : Batch: ab847091-fe80-4ef5-8b2e-4fefa89e6cdf | Procedure: PROCEDURE | Step: sales_processing | Status: success | Records: 0 | Message: Sales data processed successfully
+[2025-10-09 16:53:20,333] INFO app Thread-18 (process_request_thread) : Batch: ab847091-fe80-4ef5-8b2e-4fefa89e6cdf | Procedure: UPLOAD | Step: complete | Status: success | Records: 157448 | Message: Complete import process finished successfully
+[2025-10-09 16:53:21,040] INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:53:21] "[32mPOST /upload HTTP/1.1[0m" 302 -
+[2025-10-09 16:53:21,098] INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:53:21] "GET /upload HTTP/1.1" 200 -
+[2025-10-09 16:53:37,280] INFO app Thread-20 (process_request_thread) : Batch: 86249077-2906-46e5-9150-c064d9330518 | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 16:53:37,616] INFO app Thread-20 (process_request_thread) : Batch: 86249077-2906-46e5-9150-c064d9330518 | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File 2024MayMonthlyUnifiedTransaction.csv uploaded successfully
+[2025-10-09 16:53:37,688] INFO app Thread-20 (process_request_thread) : Batch: 86249077-2906-46e5-9150-c064d9330518 | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_payout
+[2025-10-09 16:54:20,062] INFO app Thread-20 (process_request_thread) : Batch: 86249077-2906-46e5-9150-c064d9330518 | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 166610 | Message: File processed successfully
+[2025-10-09 16:54:27,007] INFO app Thread-20 (process_request_thread) : Batch: 86249077-2906-46e5-9150-c064d9330518 | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_payout
+[2025-10-09 16:54:27,447] INFO app Thread-20 (process_request_thread) : Batch: 86249077-2906-46e5-9150-c064d9330518 | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_payout truncated
+[2025-10-09 16:54:27,644] INFO app Thread-20 (process_request_thread) : Batch: 86249077-2906-46e5-9150-c064d9330518 | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_payout
+[2025-10-09 16:57:58,322] INFO app Thread-20 (process_request_thread) : Batch: 86249077-2906-46e5-9150-c064d9330518 | Procedure: COPY | Step: insert_raw_data | Status: success | Records: 166610 | Message: Successfully copied 166610 records to stg_amz_payout
+[2025-10-09 16:57:58,570] INFO app Thread-20 (process_request_thread) : Batch: 86249077-2906-46e5-9150-c064d9330518 | Procedure: PROCEDURE | Step: payout_processing | Status: started | Records: 0 | Message: Starting payout data processing
+[2025-10-09 16:58:52,173] INFO app Thread-20 (process_request_thread) : Batch: 86249077-2906-46e5-9150-c064d9330518 | Procedure: PROCEDURE | Step: payout_processing | Status: success | Records: 0 | Message: Payout data processed successfully
+[2025-10-09 16:58:52,275] INFO app Thread-20 (process_request_thread) : Batch: 86249077-2906-46e5-9150-c064d9330518 | Procedure: UPLOAD | Step: complete | Status: success | Records: 166610 | Message: Complete import process finished successfully
+[2025-10-09 16:58:53,770] INFO werkzeug Thread-20 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:58:53] "[32mPOST /upload HTTP/1.1[0m" 302 -
+[2025-10-09 16:58:53,923] INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 16:58:53] "GET /upload HTTP/1.1" 200 -
+[2025-10-09 17:00:32,904] INFO app Thread-24 (process_request_thread) : Batch: 798ffb0d-3c63-465c-aafa-74b117c1f676 | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 17:00:33,003] INFO app Thread-24 (process_request_thread) : Batch: 798ffb0d-3c63-465c-aafa-74b117c1f676 | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File MTR_B2B.csv uploaded successfully
+[2025-10-09 17:00:33,080] INFO app Thread-24 (process_request_thread) : Batch: 798ffb0d-3c63-465c-aafa-74b117c1f676 | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_b2b
+[2025-10-09 17:00:33,434] INFO app Thread-24 (process_request_thread) : Batch: 798ffb0d-3c63-465c-aafa-74b117c1f676 | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 4946 | Message: File processed successfully
+[2025-10-09 17:00:34,457] INFO app Thread-24 (process_request_thread) : Batch: 798ffb0d-3c63-465c-aafa-74b117c1f676 | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_b2b
+[2025-10-09 17:00:34,693] INFO app Thread-24 (process_request_thread) : Batch: 798ffb0d-3c63-465c-aafa-74b117c1f676 | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_b2b truncated
+[2025-10-09 17:00:34,771] INFO app Thread-24 (process_request_thread) : Batch: 798ffb0d-3c63-465c-aafa-74b117c1f676 | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_b2b
+[2025-10-09 17:01:36,640] INFO app Thread-24 (process_request_thread) : Batch: 798ffb0d-3c63-465c-aafa-74b117c1f676 | Procedure: COPY | Step: insert_raw_data | Status: success | Records: 4946 | Message: Successfully copied 4946 records to stg_amz_b2b
+[2025-10-09 17:01:38,079] INFO app Thread-24 (process_request_thread) : Batch: 798ffb0d-3c63-465c-aafa-74b117c1f676 | Procedure: PROCEDURE | Step: sales_processing | Status: started | Records: 0 | Message: Starting sales data processing
+[2025-10-09 17:02:15,598] INFO app Thread-24 (process_request_thread) : Batch: 798ffb0d-3c63-465c-aafa-74b117c1f676 | Procedure: PROCEDURE | Step: sales_processing | Status: success | Records: 0 | Message: Sales data processed successfully
+[2025-10-09 17:02:16,022] INFO app Thread-24 (process_request_thread) : Batch: 798ffb0d-3c63-465c-aafa-74b117c1f676 | Procedure: UPLOAD | Step: complete | Status: success | Records: 4946 | Message: Complete import process finished successfully
+[2025-10-09 17:02:16,481] INFO werkzeug Thread-24 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 17:02:16] "[32mPOST /upload HTTP/1.1[0m" 302 -
+[2025-10-09 17:02:16,487] INFO werkzeug Thread-25 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 17:02:16] "GET /upload HTTP/1.1" 200 -
+[2025-10-09 17:03:59,018] INFO app Thread-27 (process_request_thread) : Batch: cb9a1829-d33c-440a-b0aa-d2c7b0e2b851 | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 17:03:59,377] INFO app Thread-27 (process_request_thread) : Batch: cb9a1829-d33c-440a-b0aa-d2c7b0e2b851 | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File MTR_B2C.csv uploaded successfully
+[2025-10-09 17:03:59,469] INFO app Thread-27 (process_request_thread) : Batch: cb9a1829-d33c-440a-b0aa-d2c7b0e2b851 | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_b2c
+[2025-10-09 17:04:13,022] INFO app Thread-27 (process_request_thread) : Batch: cb9a1829-d33c-440a-b0aa-d2c7b0e2b851 | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 136326 | Message: File processed successfully
+[2025-10-09 17:04:37,405] INFO app Thread-27 (process_request_thread) : Batch: cb9a1829-d33c-440a-b0aa-d2c7b0e2b851 | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_b2c
+[2025-10-09 17:04:37,703] INFO app Thread-27 (process_request_thread) : Batch: cb9a1829-d33c-440a-b0aa-d2c7b0e2b851 | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_b2c truncated
+[2025-10-09 17:04:38,222] INFO app Thread-27 (process_request_thread) : Batch: cb9a1829-d33c-440a-b0aa-d2c7b0e2b851 | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_b2c
+[2025-10-09 17:05:46,797] INFO app Thread-27 (process_request_thread) : Batch: cb9a1829-d33c-440a-b0aa-d2c7b0e2b851 | Procedure: COPY | Step: insert_raw_data | Status: success | Records: 136326 | Message: Successfully copied 136326 records to stg_amz_b2c
+[2025-10-09 17:05:46,935] INFO app Thread-27 (process_request_thread) : Batch: cb9a1829-d33c-440a-b0aa-d2c7b0e2b851 | Procedure: PROCEDURE | Step: sales_processing | Status: started | Records: 0 | Message: Starting sales data processing
+[2025-10-09 17:06:22,122] INFO app Thread-27 (process_request_thread) : Batch: cb9a1829-d33c-440a-b0aa-d2c7b0e2b851 | Procedure: PROCEDURE | Step: sales_processing | Status: success | Records: 0 | Message: Sales data processed successfully
+[2025-10-09 17:06:22,602] INFO app Thread-27 (process_request_thread) : Batch: cb9a1829-d33c-440a-b0aa-d2c7b0e2b851 | Procedure: UPLOAD | Step: complete | Status: success | Records: 136326 | Message: Complete import process finished successfully
+[2025-10-09 17:06:22,904] INFO werkzeug Thread-27 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 17:06:22] "[32mPOST /upload HTTP/1.1[0m" 302 -
+[2025-10-09 17:06:22,925] INFO werkzeug Thread-28 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 17:06:22] "GET /upload HTTP/1.1" 200 -
+[2025-10-09 17:06:48,661] INFO app Thread-29 (process_request_thread) : Batch: e9cf6276-a247-4e21-97bd-37bb12c21ae7 | Procedure: UPLOAD | Step: start | Status: started | Records: 0 | Message: Upload process started
+[2025-10-09 17:06:48,848] INFO app Thread-29 (process_request_thread) : Batch: e9cf6276-a247-4e21-97bd-37bb12c21ae7 | Procedure: FILE_UPLOAD | Step: save | Status: success | Records: 0 | Message: File 2024JunMonthlyUnifiedTransaction.csv uploaded successfully
+[2025-10-09 17:06:49,024] INFO app Thread-29 (process_request_thread) : Batch: e9cf6276-a247-4e21-97bd-37bb12c21ae7 | Procedure: FILE_PROCESSING | Step: start | Status: started | Records: 0 | Message: Starting file processing for stg_amz_payout
+[2025-10-09 17:07:23,042] INFO app Thread-29 (process_request_thread) : Batch: e9cf6276-a247-4e21-97bd-37bb12c21ae7 | Procedure: FILE_PROCESSING | Step: complete | Status: success | Records: 146505 | Message: File processed successfully
+[2025-10-09 17:07:27,432] INFO app Thread-29 (process_request_thread) : Batch: e9cf6276-a247-4e21-97bd-37bb12c21ae7 | Procedure: DATABASE | Step: truncate | Status: started | Records: 0 | Message: Starting database operations for stg_amz_payout
+[2025-10-09 17:07:27,628] INFO app Thread-29 (process_request_thread) : Batch: e9cf6276-a247-4e21-97bd-37bb12c21ae7 | Procedure: DATABASE | Step: truncate | Status: success | Records: 0 | Message: Table stg_amz_payout truncated
+[2025-10-09 17:07:27,809] INFO app Thread-29 (process_request_thread) : Batch: e9cf6276-a247-4e21-97bd-37bb12c21ae7 | Procedure: COPY | Step: insert_raw_data | Status: started | Records: 0 | Message: Starting data copy to stg_amz_payout
+[2025-10-09 17:11:32,613] INFO app Thread-29 (process_request_thread) : Batch: e9cf6276-a247-4e21-97bd-37bb12c21ae7 | Procedure: COPY | Step: insert_raw_data | Status: success | Records: 146505 | Message: Successfully copied 146505 records to stg_amz_payout
+[2025-10-09 17:11:32,782] INFO app Thread-29 (process_request_thread) : Batch: e9cf6276-a247-4e21-97bd-37bb12c21ae7 | Procedure: PROCEDURE | Step: payout_processing | Status: started | Records: 0 | Message: Starting payout data processing
+[2025-10-09 17:12:28,646] INFO app Thread-29 (process_request_thread) : Batch: e9cf6276-a247-4e21-97bd-37bb12c21ae7 | Procedure: PROCEDURE | Step: payout_processing | Status: success | Records: 0 | Message: Payout data processed successfully
+[2025-10-09 17:12:28,802] INFO app Thread-29 (process_request_thread) : Batch: e9cf6276-a247-4e21-97bd-37bb12c21ae7 | Procedure: UPLOAD | Step: complete | Status: success | Records: 146505 | Message: Complete import process finished successfully
+[2025-10-09 17:12:29,102] INFO werkzeug Thread-29 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 17:12:29] "[32mPOST /upload HTTP/1.1[0m" 302 -
+[2025-10-09 17:12:29,112] INFO werkzeug Thread-31 (process_request_thread) : 127.0.0.1 - - [09/Oct/2025 17:12:29] "GET /upload HTTP/1.1" 200 -

@@ -9,7 +9,51 @@ from datetime import datetime
 from difflib import SequenceMatcher
 import hashlib
 from werkzeug.utils import secure_filename
+import logging
+import uuid
+from datetime import datetime
+from logging.config import dictConfig
+import logging
 
+# Configure logging BEFORE creating the Flask app
+dictConfig({
+    'version': 1,
+    'formatters': {
+        'default': {
+            'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+        },
+        'detailed': {
+            'format': '[%(asctime)s] %(levelname)s %(name)s %(threadName)s : %(message)s'
+        }
+    },
+    'handlers': {
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'flask_import.log',
+            'formatter': 'detailed',
+            'level': 'INFO',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+            'level': 'DEBUG',
+        }
+    },
+    'root': {
+        'level': 'INFO',
+        'handlers': ['console', 'file']
+    },
+    'loggers': {
+        'werkzeug': {
+            'level': 'INFO',
+            'handlers': ['console', 'file'],
+            'propagate': False
+        }
+    }
+})
+
+
+# ... rest of your existing app configuration
 app = Flask(__name__)
 app.secret_key = "secret_key_123"
 
@@ -113,6 +157,43 @@ PAYOUT_COLUMN_MAPPING = {
     "other": "other",
     "total": "total"
 }
+#---------------------------------
+# Add to your existing imports in app.py
+
+def log_to_db(import_batch_id, procedure_name, step_name, status, records_affected=0, message="", error_details=""):
+    """
+    Enhanced logging function with both database and file logging
+    """
+    # Log to file using Flask's logger
+    log_message = f"Batch: {import_batch_id} | Procedure: {procedure_name} | Step: {step_name} | Status: {status} | Records: {records_affected} | Message: {message}"
+    
+    if status == 'error':
+        app.logger.error(log_message)
+        if error_details:
+            app.logger.error(f"Error details: {error_details}")
+    elif status == 'success':
+        app.logger.info(log_message)
+    else:
+        app.logger.info(log_message)
+    
+    # Also log to database
+    log_conn = None
+    try:
+        log_conn = psycopg2.connect(**DB_CONFIG)
+        with log_conn.cursor() as log_cur:
+            log_cur.execute("""
+                INSERT INTO spigen.import_logs 
+                (import_batch_id, procedure_name, step_name, status, records_affected, message, error_details)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """, (import_batch_id, procedure_name, step_name, status, records_affected, message, error_details))
+            log_conn.commit()
+    except Exception as e:
+        app.logger.error(f"Failed to write to log table: {e}")
+        # Fallback to file logging only
+    finally:
+        if log_conn:
+            log_conn.close()
+
 
 # ---------- ENHANCED FILE VALIDATION ----------
 
@@ -584,76 +665,208 @@ def upload():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
+        import_batch_id = str(uuid.uuid4())
         platform = request.form['platform']
         table_type = request.form['table_type']
         file = request.files['file']
 
+        # Log the start of upload process
+        app.logger.info(f"🚀 Starting upload process - Batch: {import_batch_id}, Platform: {platform}, Type: {table_type}")
+        log_to_db(import_batch_id, 'UPLOAD', 'start', 'started', 0, "Upload process started")
+
         if not file or file.filename == '':
+            error_msg = "No file selected"
+            app.logger.warning(error_msg)
             flash("Please select a file", "danger")
             return redirect(url_for('upload'))
 
         try:
-            # Secure file upload handling:cite[3]:cite[8]
+            # Secure file upload handling
             filename = secure_file_upload(file)
             temp_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
             file.save(temp_path)
+            
+            app.logger.info(f"📁 File saved temporarily: {temp_path}")
+            log_to_db(import_batch_id, 'FILE_UPLOAD', 'save', 'success', 0, f"File {filename} uploaded successfully")
 
             table_name = f"stg_{platform.lower()}_{table_type.lower()}"
+            app.logger.info(f"🎯 Processing table: {table_name}")
 
-            print(f"\n🚀 UPLOAD: {table_name} - {filename}")
+            # Process file based on type
+            log_to_db(import_batch_id, 'FILE_PROCESSING', 'start', 'started', 0, f"Starting file processing for {table_name}")
             
-            # Process file
-            if table_type.lower() == 'payout':
-                df = smart_payout_processor(temp_path)
-            else:
-                df = process_b2b_b2c_file(temp_path)
+            try:
+                if table_type.lower() == 'payout':
+                    df = smart_payout_processor(temp_path)
+                else:
+                    df = process_b2b_b2c_file(temp_path)
+                
+                app.logger.info(f"✅ File processed successfully - Rows: {len(df)}, Columns: {len(df.columns)}")
+                log_to_db(import_batch_id, 'FILE_PROCESSING', 'complete', 'success', len(df), "File processed successfully")
+                
+            except Exception as processing_error:
+                error_msg = f"File processing failed: {str(processing_error)}"
+                app.logger.error(error_msg)
+                log_to_db(import_batch_id, 'FILE_PROCESSING', 'process', 'error', 0, error_msg, str(processing_error))
+                raise processing_error
 
-            # Optimize once
+            # Optimize dataframe
             df = optimize_dataframe(df, table_name)
+            app.logger.info("🔧 Dataframe optimization completed")
 
             if df.empty:
+                error_msg = "No data found after processing"
+                app.logger.warning(error_msg)
+                log_to_db(import_batch_id, 'VALIDATION', 'check', 'error', 0, error_msg)
                 flash("No data found after processing", "danger")
                 return redirect(url_for('upload'))
 
-            # Database operations with enhanced error handling
+            # Database operations with comprehensive logging
+            log_to_db(import_batch_id, 'DATABASE', 'truncate', 'started', 0, f"Starting database operations for {table_name}")
+            
             try:
                 with psycopg2.connect(**DB_CONFIG) as conn:
                     with conn.cursor() as cur:
+                        # Truncate table
+                        app.logger.info(f"🗑️ Truncating table: {table_name}")
                         cur.execute(f"TRUNCATE TABLE spigen.{table_name}")
+                        log_to_db(import_batch_id, 'DATABASE', 'truncate', 'success', 0, f"Table {table_name} truncated")
+                        
+                        # Copy data to staging
+                        app.logger.info("📤 Copying data to database...")
+                        log_to_db(import_batch_id, 'COPY', 'insert_raw_data', 'started', 0, f"Starting data copy to {table_name}")
                         
                         output = io.StringIO()
-                        # Use na_rep='NULL' to properly handle null values in CSV
                         df.to_csv(output, index=False, header=False, na_rep='NULL')
                         output.seek(0)
                         
                         columns_str = ", ".join(df.columns)
-                        # Enhanced COPY command with explicit NULL handling
                         copy_sql = f"COPY spigen.{table_name} ({columns_str}) FROM STDIN WITH CSV NULL 'NULL'"
                         cur.copy_expert(copy_sql, output)
                         conn.commit()
 
-                flash(f"✅ Successfully imported {len(df)} records into {table_name}", "success")
+                        app.logger.info(f"✅ Successfully copied {len(df)} records to {table_name}")
+                        log_to_db(import_batch_id, 'COPY', 'insert_raw_data', 'success', len(df), f"Successfully copied {len(df)} records to {table_name}")
+
+                        # Execute stored procedures with detailed logging
+                        app.logger.info("🔄 Executing stored procedures...")
+                        
+                        # Sales data processing
+                        if table_type.lower() in ['b2b', 'b2c']:
+                            try:
+                                app.logger.info("📊 Processing sales data...")
+                                log_to_db(import_batch_id, 'PROCEDURE', 'sales_processing', 'started', 0, "Starting sales data processing")
+                                
+                                cur.execute("CALL spigen.process_amazon_sales()")
+                                conn.commit()
+                                
+                                # Try to get affected rows count
+                                try:
+                                    cur.execute("SELECT COUNT(*) FROM spigen.tgt_sales WHERE import_batch_id = %s", (import_batch_id,))
+                                    sales_count = cur.fetchone()[0]
+                                except:
+                                    sales_count = 0
+                                
+                                app.logger.info(f"✅ Sales data processed successfully - Records: {sales_count}")
+                                log_to_db(import_batch_id, 'PROCEDURE', 'sales_processing', 'success', sales_count, "Sales data processed successfully")
+                                
+                            except Exception as sales_error:
+                                error_msg = f"Sales procedure failed: {str(sales_error)}"
+                                app.logger.error(error_msg)
+                                log_to_db(import_batch_id, 'PROCEDURE', 'sales_processing', 'error', 0, error_msg, str(sales_error))
+                                raise sales_error
+
+                        # Payout data processing
+                        if table_type.lower() == 'payout':
+                            try:
+                                app.logger.info("💰 Processing payout data...")
+                                log_to_db(import_batch_id, 'PROCEDURE', 'payout_processing', 'started', 0, "Starting payout data processing")
+                                
+                                cur.execute("CALL spigen.process_amazon_payout()")
+                                conn.commit()
+                                
+                                # Try to get affected rows count
+                                try:
+                                    cur.execute("SELECT COUNT(*) FROM spigen.tgt_payout WHERE import_batch_id = %s", (import_batch_id,))
+                                    payout_count = cur.fetchone()[0]
+                                except:
+                                    payout_count = 0
+                                
+                                app.logger.info(f"✅ Payout data processed successfully - Records: {payout_count}")
+                                log_to_db(import_batch_id, 'PROCEDURE', 'payout_processing', 'success', payout_count, "Payout data processed successfully")
+                                
+                            except Exception as payout_error:
+                                error_msg = f"Payout procedure failed: {str(payout_error)}"
+                                app.logger.error(error_msg)
+                                log_to_db(import_batch_id, 'PROCEDURE', 'payout_processing', 'error', 0, error_msg, str(payout_error))
+                                raise payout_error
+
+                # Final success log
+                success_msg = f"✅ Complete import successful - Batch: {import_batch_id}, Total Records: {len(df)}"
+                app.logger.info(success_msg)
+                log_to_db(import_batch_id, 'UPLOAD', 'complete', 'success', len(df), "Complete import process finished successfully")
+                flash(f"✅ Successfully imported {len(df)} records and processed data", "success")
 
             except psycopg2.Error as db_error:
+                error_msg = f"Database operation failed: {str(db_error)}"
+                app.logger.error(error_msg)
+                log_to_db(import_batch_id, 'DATABASE', 'operation', 'error', 0, error_msg, str(db_error))
                 flash(f"❌ Database error: {str(db_error)}", "danger")
-                print(f"🔴 DATABASE ERROR: {str(db_error)}")
 
         except ValueError as e:
+            error_msg = f"Validation error: {str(e)}"
+            app.logger.warning(error_msg)
+            log_to_db(import_batch_id, 'VALIDATION', 'check', 'error', 0, error_msg, str(e))
             flash(f"❌ Validation error: {str(e)}", "danger")
         except Exception as e:
+            error_msg = f"Upload process failed: {str(e)}"
+            app.logger.error(error_msg)
+            log_to_db(import_batch_id, 'UPLOAD', 'process', 'error', 0, error_msg, str(e))
             flash(f"❌ Upload error: {str(e)}", "danger")
-            print(f"🔴 ERROR: {str(e)}")
-            import traceback
-            print(f"🔴 TRACEBACK: {traceback.format_exc()}")
         finally:
-            # Cleanup
+            # Cleanup temporary file
             if 'temp_path' in locals() and os.path.exists(temp_path):
-                os.remove(temp_path)
+                try:
+                    os.remove(temp_path)
+                    app.logger.info(f"🧹 Cleaned up temporary file: {temp_path}")
+                except Exception as cleanup_error:
+                    app.logger.warning(f"Failed to clean up temp file: {cleanup_error}")
 
         return redirect(url_for('upload'))
 
     return render_template('upload.html')
+@app.route('/logs')
+def view_logs():
+    if 'user' not in session:
+        flash("Please login first", "warning")
+        return redirect(url_for('login'))
+    
+    # Read from log file
+    log_entries = []
+    try:
+        with open('flask_import.log', 'r') as log_file:
+            log_entries = log_file.readlines()[-100:]  # Last 100 entries
+    except FileNotFoundError:
+        log_entries = ["No log file found yet."]
+    
+    # Get database logs
+    db_logs = []
+    try:
+        with psycopg2.connect(**DB_CONFIG) as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT import_batch_id, procedure_name, step_name, status, 
+                           records_affected, message, created_at 
+                    FROM spigen.import_logs 
+                    ORDER BY created_at DESC 
+                    LIMIT 50
+                """)
+                db_logs = cur.fetchall()
+    except Exception as e:
+        db_logs = [("Error", "Error", "Error", "error", 0, f"Failed to load DB logs: {str(e)}", datetime.now())]
+    
+    return render_template('logs.html', file_logs=log_entries, db_logs=db_logs)
 
 if __name__ == '__main__':
     # Create uploads directory if it doesn't exist
