@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="text-align: center; padding-top: 60px;">
+    <h1>Upload Data</h1>
+    
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" style="background: white; display: inline-block; padding: 30px 50px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <!-- Platform Selection -->
+        <div style="margin: 15px 0;">
+            <label for="platform" style="display: block; text-align: left; margin-bottom: 5px;">Platform:</label>
+            <select id="platform" name="platform" required style="padding: 10px; width: 270px; border-radius: 8px; border: 1px solid #ccc;">
+                <option value="">Select Platform</option>
+                <option value="amz">Amazon</option>
+                <option value="jio">Jio</option>
+            </select>
+        </div>
+
+        <!-- Table Type Selection -->
+        <div style="margin: 15px 0;">
+            <label for="table_type" style="display: block; text-align: left; margin-bottom: 5px;">Table Type:</label>
+            <select id="table_type" name="table_type" required style="padding: 10px; width: 270px; border-radius: 8px; border: 1px solid #ccc;">
+                <option value="">Select Table Type</option>
+                <option value="b2b">B2B</option>
+                <option value="b2c">B2C</option>
+                <option value="payout">Payout</option>
+            </select>
+        </div>
+
+        <!-- File Upload -->
+        <div style="margin: 15px 0;">
+            <label for="file" style="display: block; text-align: left; margin-bottom: 5px;">File:</label>
+            <input type="file" id="file" name="file" accept=".csv,.xlsx,.xls" required style="padding: 10px; width: 250px;">
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" style="background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px;">
+            Upload File
+        </button>
+    </form>
+
+    <!-- Logout Link -->
+    <div style="margin-top: 20px;">
+        <a href="{{ url_for('logout') }}" style="color: #dc3545; text-decoration: none;">Logout</a>
+    </div>
+</div>
+{% endblock %}
