@@ -1,2 +1,54 @@
+# ------------------------------
+# Python
+# ------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.py.class
+
+# Ignore virtual environments
+venv/
+.env/
+.env.bak/
+.venv/
+ENV/
+env/
+env.bak/
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore logs
+*.log
+logs/
+etl_web_portal/logs/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore compiled or temporary files
+*.sqlite3
+*.db
+*.bak
+*.tmp
+*.swp
+
+# Ignore specific project files
 date_table.py
 
+# Ignore local environment and secret configs
+*.env
+.env.local
+config.json
+secrets.json
+
+# Ignore uploads or generated files
+uploads/
+output/
+dist/
+build/
