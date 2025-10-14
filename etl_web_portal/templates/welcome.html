@@ -1,13 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="text-align: center; padding-top: 100px;">
-    <div style="background: white; display: inline-block; padding: 40px 60px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        <h1>Welcome to Data Upload Portal</h1>
-        <p>Please log in to continue.</p>
-        <a href="{{ url_for('login') }}" style="background: #007bff; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; display: inline-block; margin-top: 15px;">
-            Login
-        </a>
+<div class="welcome-container">
+    <div class="welcome-content">
+        <div class="welcome-header">
+            <h1>Welcome</h1>
+            <p>Data Upload Portal</p>
+        </div>
+
+        <div class="welcome-actions">
+            <a href="{{ url_for('login') }}" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i>
+                Sign In
+            </a>
+        </div>
     </div>
 </div>
+
+<style>
+    .welcome-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        text-align: center;
+    }
+
+    .welcome-content {
+        max-width: 500px;
+    }
+
+    .welcome-header h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        opacity: 0.9;
+    }
+
+    .welcome-header p {
+        font-size: 1.3rem;
+        opacity: 0.8;
+        margin-bottom: 50px;
+    }
+
+    .btn {
+        font-size: 1.1rem;
+        padding: 15px 50px;
+        border-radius: 50px;
+    }
+</style>
 {% endblock %}

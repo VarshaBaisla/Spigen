@@ -1,23 +1,115 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="text-align: center; padding-top: 60px;">
-    <form action="{{ url_for('login') }}" method="post" style="background: white; display: inline-block; padding: 30px 50px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        <h2>Login</h2>
-        
-        <div style="margin: 15px 0;">
-            <label for="username" style="display: block; text-align: left; margin-bottom: 5px;">Username:</label>
-            <input type="text" id="username" name="username" required style="padding: 10px; width: 250px; border-radius: 8px; border: 1px solid #ccc;">
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Sign In</h2>
+            <p>Access your account</p>
         </div>
-        
-        <div style="margin: 15px 0;">
-            <label for="password" style="display: block; text-align: left; margin-bottom: 5px;">Password:</label>
-            <input type="password" id="password" name="password" required style="padding: 10px; width: 250px; border-radius: 8px; border: 1px solid #ccc;">
+
+        <form action="{{ url_for('login') }}" method="post" class="login-form">
+            <div class="form-group">
+                <input type="text" id="username" name="username" required placeholder="Username">
+            </div>
+            
+            <div class="form-group">
+                <input type="password" id="password" name="password" required placeholder="Password">
+            </div>
+            
+            <button type="submit" class="btn btn-primary login-btn">
+                <i class="fas fa-sign-in-alt"></i>
+                Sign In
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <a href="{{ url_for('home') }}" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
         </div>
-        
-        <button type="submit" style="background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px; width: 100%;">
-            Login
-        </button>
-    </form>
+    </div>
 </div>
+
+<style>
+    .login-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        padding: 40px 0;
+    }
+
+    .login-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        color: var(--dark);
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .login-header h2 {
+        font-size: 1.8rem;
+        margin: 0 0 10px;
+        color: var(--dark);
+    }
+
+    .login-header p {
+        color: var(--gray);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        transition: var(--transition);
+        background: white;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .login-btn {
+        width: 100%;
+        margin-top: 10px;
+        padding: 14px;
+        font-size: 1.1rem;
+    }
+
+    .login-footer {
+        margin-top: 25px;
+        text-align: center;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--gray);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: var(--transition);
+    }
+
+    .back-link:hover {
+        color: var(--primary);
+    }
+</style>
 {% endblock %}

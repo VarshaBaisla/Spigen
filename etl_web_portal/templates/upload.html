@@ -1,46 +1,438 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="text-align: center; padding-top: 60px;">
-    <h1>Upload Data</h1>
-    
-    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" style="background: white; display: inline-block; padding: 30px 50px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        <!-- Platform Selection -->
-        <div style="margin: 15px 0;">
-            <label for="platform" style="display: block; text-align: left; margin-bottom: 5px;">Platform:</label>
-            <select id="platform" name="platform" required style="padding: 10px; width: 270px; border-radius: 8px; border: 1px solid #ccc;">
-                <option value="">Select Platform</option>
-                <option value="amz">Amazon</option>
-                <option value="jio">Jio</option>
-            </select>
-        </div>
+<div class="upload-container">
+    <div class="upload-header">
+        <h1>Data Upload</h1>
+        <p>Upload your B2B, B2C, and Payout files</p>
+    </div>
 
-        <!-- Table Type Selection -->
-        <div style="margin: 15px 0;">
-            <label for="table_type" style="display: block; text-align: left; margin-bottom: 5px;">Table Type:</label>
-            <select id="table_type" name="table_type" required style="padding: 10px; width: 270px; border-radius: 8px; border: 1px solid #ccc;">
-                <option value="">Select Table Type</option>
-                <option value="b2b">B2B</option>
-                <option value="b2c">B2C</option>
-                <option value="payout">Payout</option>
-            </select>
-        </div>
+    <div class="upload-card">
+        <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" class="upload-form" id="uploadForm">
+            <!-- Platform Selection -->
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="platform" class="form-label">
+                        <i class="fas fa-cube"></i>
+                        Platform
+                    </label>
+                    <select id="platform" name="platform" class="form-select" required>
+                        <option value="">Select Platform</option>
+                        <option value="amz">Amazon</option>
+                        <option value="jio">Jio</option>
+                    </select>
+                </div>
+            </div>
 
-        <!-- File Upload -->
-        <div style="margin: 15px 0;">
-            <label for="file" style="display: block; text-align: left; margin-bottom: 5px;">File:</label>
-            <input type="file" id="file" name="file" accept=".csv,.xlsx,.xls" required style="padding: 10px; width: 250px;">
-        </div>
+            <!-- File Upload Section -->
+            <div class="form-section">
+                <h3 class="section-title">Upload Files</h3>
+                
+                <div class="file-upload-section">
+                    <!-- B2B File -->
+                    <div class="file-upload-group">
+                        <div class="file-header">
+                            <div class="file-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div class="file-info">
+                                <h4>B2B File</h4>
+                                <p>Business-to-business transaction data</p>
+                            </div>
+                        </div>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="b2b_file" name="b2b_file" accept=".csv,.xlsx,.xls" required>
+                            <label for="b2b_file" class="file-input-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Choose File</span>
+                            </label>
+                        </div>
+                        <div class="file-preview" id="b2b-preview"></div>
+                    </div>
 
-        <!-- Submit Button -->
-        <button type="submit" style="background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px;">
-            Upload File
-        </button>
-    </form>
+                    <!-- B2C File -->
+                    <div class="file-upload-group">
+                        <div class="file-header">
+                            <div class="file-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="file-info">
+                                <h4>B2C File</h4>
+                                <p>Business-to-consumer transaction data</p>
+                            </div>
+                        </div>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="b2c_file" name="b2c_file" accept=".csv,.xlsx,.xls" required>
+                            <label for="b2c_file" class="file-input-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Choose File</span>
+                            </label>
+                        </div>
+                        <div class="file-preview" id="b2c-preview"></div>
+                    </div>
 
-    <!-- Logout Link -->
-    <div style="margin-top: 20px;">
-        <a href="{{ url_for('logout') }}" style="color: #dc3545; text-decoration: none;">Logout</a>
+                    <!-- Payout File -->
+                    <div class="file-upload-group">
+                        <div class="file-header">
+                            <div class="file-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="file-info">
+                                <h4>Payout File</h4>
+                                <p>Financial payout and reconciliation data</p>
+                            </div>
+                        </div>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="payout_file" name="payout_file" accept=".csv,.xlsx,.xls" required>
+                            <label for="payout_file" class="file-input-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Choose File</span>
+                            </label>
+                        </div>
+                        <div class="file-preview" id="payout-preview"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="form-section submit-section">
+                <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">
+                    <i class="fas fa-rocket"></i>
+                    Process Files
+                </button>
+                
+                <div class="upload-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Supported formats: CSV, XLSX, XLS </span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation-links">
+        <a href="{{ url_for('logout') }}" class="logout-link">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
     </div>
 </div>
+
+<style>
+    .upload-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px 0;
+    }
+
+    .upload-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .upload-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        opacity: 0.9;
+    }
+
+    .upload-header p {
+        font-size: 1.1rem;
+        opacity: 0.8;
+    }
+
+    .upload-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 40px;
+        margin-bottom: 30px;
+        color: var(--dark);
+    }
+
+    .form-section {
+        margin-bottom: 40px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--dark);
+        font-size: 1rem;
+    }
+
+    .form-label i {
+        color: var(--primary);
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        background: white;
+        transition: var(--transition);
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+    }
+
+    .form-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        margin-bottom: 25px;
+        color: var(--dark);
+        font-weight: 600;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 10px;
+    }
+
+    .file-upload-section {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .file-upload-group {
+        border: 2px solid #e2e8f0;
+        border-radius: var(--border-radius);
+        padding: 25px;
+        transition: var(--transition);
+        background: #f8fafc;
+    }
+
+    .file-upload-group:hover {
+        border-color: var(--primary);
+        background: white;
+    }
+
+    .file-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .file-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: var(--border-radius);
+        background: linear-gradient(135deg, var(--primary), #3b82f6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .file-icon i {
+        font-size: 1.3rem;
+        color: white;
+    }
+
+    .file-info h4 {
+        font-size: 1.1rem;
+        color: var(--dark);
+        margin-bottom: 5px;
+    }
+
+    .file-info p {
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+
+    .file-input-wrapper {
+        position: relative;
+    }
+
+    .file-input-wrapper input {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .file-input-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: white;
+        border: 2px solid var(--primary);
+        border-radius: var(--border-radius);
+        color: var(--primary);
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .file-input-label:hover {
+        background: var(--primary);
+        color: white;
+    }
+
+    .file-preview {
+        margin-top: 15px;
+        padding: 12px;
+        background: white;
+        border-radius: var(--border-radius);
+        font-size: 0.85rem;
+        color: var(--gray);
+        display: none;
+        border: 1px solid #e2e8f0;
+    }
+
+    .file-preview.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .submit-section {
+        text-align: center;
+        border-top: 2px solid #e2e8f0;
+        padding-top: 30px;
+    }
+
+    .submit-btn {
+        padding: 16px 40px;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+    .upload-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+
+    .navigation-links {
+        text-align: center;
+    }
+
+    .logout-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: white;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: var(--transition);
+        opacity: 0.8;
+    }
+
+    .logout-link:hover {
+        opacity: 1;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submit-btn');
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+        
+        // File selection preview
+        fileInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const file = this.files[0];
+                const previewId = this.id + '-preview';
+                const preview = document.getElementById(previewId);
+                
+                if (file) {
+                    const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+                    preview.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-file" style="color: #2563eb;"></i>
+                            <div>
+                                <div style="font-weight: 500;">${file.name}</div>
+                                <div style="font-size: 0.8rem; color: #64748b;">${fileSize} MB</div>
+                            </div>
+                        </div>
+                    `;
+                    preview.classList.add('active');
+                } else {
+                    preview.classList.remove('active');
+                }
+            });
+        });
+        
+        // Form submission handler
+        form.addEventListener('submit', function(e) {
+            const platform = document.getElementById('platform').value;
+            const filesSelected = Array.from(fileInputs).some(input => input.files.length > 0);
+            
+            if (!platform) {
+                e.preventDefault();
+                showToast('Please select a platform', 'warning');
+                return false;
+            }
+            
+            if (!filesSelected) {
+                e.preventDefault();
+                showToast('Please select at least one file to upload', 'warning');
+                return false;
+            }
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing... Please Wait';
+            
+            return true;
+        });
+        
+        function showToast(message, type) {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${getIcon(type)}"></i>
+                <span>${message}</span>
+            `;
+            
+            // Add to flash messages container
+            const flashContainer = document.querySelector('.flash-messages');
+            flashContainer.appendChild(toast);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 500);
+            }, 5000);
+        }
+        
+        function getIcon(type) {
+            const icons = {
+                'success': 'check-circle',
+                'danger': 'exclamation-circle',
+                'warning': 'exclamation-triangle',
+                'info': 'info-circle'
+            };
+            return icons[type] || 'info-circle';
+        }
+    });
+</script>
 {% endblock %}
