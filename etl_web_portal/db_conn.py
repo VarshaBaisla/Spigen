@@ -1,28 +1,31 @@
-# db_conn.py - REPLACE the entire file with this:
+# db_conn.py - FIXED VERSION
 import psycopg2
 import time
+import io
+
+# ---------- DATABASE CONFIG ----------
+# In your DB_CONFIG, increase the timeout
+DB_CONFIG = {
+    "host": "localhost",
+    "database": "postgres", 
+    "user": "postgres",
+    "password": "123456",
+    "connect_timeout": 30,
+    "options": "-c statement_timeout=3600000 -c lock_timeout=3600000"  # 60 minutes timeout
+}
 
 def get_db_connection():
     """
     Establishes and returns a PostgreSQL database connection with timeout settings.
     """
-    DB_CONFIG = {
-        "host": "localhost",
-        "database": "postgres",
-        "user": "postgres",
-        "password": "123456",
-        "connect_timeout": 30,
-        "options": "-c statement_timeout=300000 -c lock_timeout=300000"  # 5 minute timeouts
-    }
-    
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         
         # Set additional timeout parameters
         conn.autocommit = False
         with conn.cursor() as cur:
-            cur.execute("SET statement_timeout = 300000;")  # 5 minutes
-            cur.execute("SET lock_timeout = 300000;")       # 5 minutes
+            cur.execute("SET statement_timeout = 1800000;")  # 30 minutes
+            cur.execute("SET lock_timeout = 1800000;")       # 30 minutes
         
         return conn
     except Exception as e:
@@ -42,7 +45,8 @@ def chunked_insert_dataframe(conn, df, table_name, chunk_size=1000):
             chunk.to_csv(output, index=False, header=False, na_rep='NULL')
             output.seek(0)
             
-            columns_str = ", ".join(df.columns)
+            # In chunked_insert_dataframe function:
+            columns_str = ", ".join([f'"{col}"' for col in df.columns])  # ADD QUOTES
             copy_sql = f"COPY spigen.{table_name} ({columns_str}) FROM STDIN WITH CSV NULL 'NULL'"
             
             with conn.cursor() as cur:

@@ -41,20 +41,21 @@
                             <div class="file-info">
                                 <h4>B2B File</h4>
                                 <p>Business-to-business transaction data</p>
-                                <small class="file-naming-rule">Expected formats: MTR_B2B-MONTH-YEAR.csv or MTR_B2B-MONTH-YEAR-UNIQUEID.csv</small>
-                                <small class="file-naming-rule">Example: MTR_B2B-APRIL-2024.csv or MTR_B2B-APRIL-2024-A21X0IZWUD6LPQ.csv</small>
+                                <small class="file-naming-rule">Format: MTR_B2B-MONTH-YEAR.csv</small>
                             </div>
                         </div>
                         <div class="file-input-wrapper">
                             <input type="file" id="b2bFile" name="b2b_file" accept=".csv">
-                            <label for="b2bFile" class="file-input-label">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <span class="file-label-text">Choose B2B File</span>
-                            </label>
-                            <div class="selected-file-name">
-                                <div class="file-status-default" id="b2bText">No file chosen</div>
-                                <div class="file-validation-status" id="b2bMsg"></div>
+                            <div class="file-input-line">
+                                <label for="b2bFile" class="file-input-label">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span class="file-label-text">Choose File</span>
+                                </label>
+                                <div class="selected-file-name">
+                                    <div class="file-status-default" id="b2bText">No file chosen</div>
+                                </div>
                             </div>
+                            <div class="file-validation-status" id="b2bMsg"></div>
                         </div>
                     </div>
 
@@ -67,20 +68,21 @@
                             <div class="file-info">
                                 <h4>B2C File</h4>
                                 <p>Business-to-consumer transaction data</p>
-                                <small class="file-naming-rule">Expected formats: MTR_B2C-MONTH-YEAR.csv or MTR_B2C-MONTH-YEAR-UNIQUEID.csv</small>
-                                <small class="file-naming-rule">Example: MTR_B2C-APRIL-2024.csv or MTR_B2C-APRIL-2024-A21X0IZWUD6LPQ.csv</small>
+                                <small class="file-naming-rule">Format: MTR_B2C-MONTH-YEAR.csv</small>
                             </div>
                         </div>
                         <div class="file-input-wrapper">
                             <input type="file" id="b2cFile" name="b2c_file" accept=".csv">
-                            <label for="b2cFile" class="file-input-label">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <span class="file-label-text">Choose B2C File</span>
-                            </label>
-                            <div class="selected-file-name">
-                                <div class="file-status-default" id="b2cText">No file chosen</div>
-                                <div class="file-validation-status" id="b2cMsg"></div>
+                            <div class="file-input-line">
+                                <label for="b2cFile" class="file-input-label">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span class="file-label-text">Choose File</span>
+                                </label>
+                                <div class="selected-file-name">
+                                    <div class="file-status-default" id="b2cText">No file chosen</div>
+                                </div>
                             </div>
+                            <div class="file-validation-status" id="b2cMsg"></div>
                         </div>
                     </div>
 
@@ -93,20 +95,21 @@
                             <div class="file-info">
                                 <h4>Payout File</h4>
                                 <p>Financial payout and reconciliation data</p>
-                                <small class="file-naming-rule">Expected formats: YYYYMMMonthlyUnifiedTransaction.csv or PLATFORM_Payout_Month_Year.csv</small>
-                                <small class="file-naming-rule">Example: 2024AugMonthlyUnifiedTransaction.csv or AMZ_Payout_Apr_2024.csv</small>
+                                <small class="file-naming-rule">Format: YYYYMMMonthlyUnifiedTransaction.csv</small>
                             </div>
                         </div>
                         <div class="file-input-wrapper">
                             <input type="file" id="payoutFile" name="payout_file" accept=".csv">
-                            <label for="payoutFile" class="file-input-label">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <span class="file-label-text">Choose Payout File</span>
-                            </label>
-                            <div class="selected-file-name">
-                                <div class="file-status-default" id="payoutText">No file chosen</div>
-                                <div class="file-validation-status" id="payoutMsg"></div>
+                            <div class="file-input-line">
+                                <label for="payoutFile" class="file-input-label">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span class="file-label-text">Choose File</span>
+                                </label>
+                                <div class="selected-file-name">
+                                    <div class="file-status-default" id="payoutText">No file chosen</div>
+                                </div>
                             </div>
+                            <div class="file-validation-status" id="payoutMsg"></div>
                         </div>
                     </div>
                 </div>
@@ -127,39 +130,10 @@
         </form>
     </div>
 
-    <!-- Recent Activity Logs -->
-    <div class="logs-section">
-        <div class="logs-header">
-            <h3><i class="fas fa-history"></i> Recent Import Activity</h3>
-            <div class="logs-controls">
-                <button onclick="refreshLogs()" class="btn-refresh">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-                <a href="{{ url_for('view_logs') }}" class="view-all-link">View All Logs</a>
-            </div>
-        </div>
-        
-        <div class="logs-container" id="recentLogs">
-            <div class="log-entry">
-                <div class="log-time">--:--:--</div>
-                <div class="log-message">No recent import activity. Upload files to see live logs here.</div>
-            </div>
-            <!-- Logs will be dynamically added here -->
-        </div>
-        
-        <div class="logs-footer">
-            <small><i class="fas fa-info-circle"></i> Logs update automatically during imports</small>
-        </div>
-    </div>
-
     <div class="navigation-links">
         <a href="{{ url_for('import_progress') }}" class="nav-link">
             <i class="fas fa-chart-line"></i>
             View Import Progress
-        </a>
-        <a href="{{ url_for('view_logs') }}" class="nav-link">
-            <i class="fas fa-history"></i>
-            View System Logs
         </a>
         <a href="{{ url_for('logout') }}" class="logout-link">
             <i class="fas fa-sign-out-alt"></i>
@@ -171,71 +145,71 @@
 <style>
 /* Main Container Styles */
 .upload-container {
-    max-width: 900px;
+    max-width: 800px;
     margin: 0 auto;
-    padding: 30px 20px;
+    padding: 20px 15px;
     min-height: 100vh;
 }
 
 .upload-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     color: white;
 }
 
 .upload-header h1 {
-    font-size: 2.8rem;
+    font-size: 2.2rem;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .upload-header p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     opacity: 0.9;
     font-weight: 300;
 }
 
 .upload-card {
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    padding: 50px;
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    padding: 30px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 /* Form Sections */
 .form-section {
-    margin-bottom: 50px;
+    margin-bottom: 35px;
 }
 
 .form-group {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .form-label {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-bottom: 10px;
     font-weight: 600;
     color: #1e293b;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .form-label i {
     color: #3b82f6;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .form-select {
     width: 100%;
-    padding: 16px 20px;
+    padding: 12px 16px;
     border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    font-size: 1rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
     background: white;
     transition: all 0.3s ease;
     font-family: inherit;
@@ -248,25 +222,25 @@
 }
 
 .section-title {
-    font-size: 1.5rem;
-    margin-bottom: 30px;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
     color: #1e293b;
     font-weight: 700;
-    border-bottom: 3px solid #3b82f6;
-    padding-bottom: 15px;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 12px;
 }
 
-/* File Upload Sections */
+/* File Upload Sections - More Compact */
 .file-upload-section {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 }
 
 .file-upload-group {
     border: 2px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 30px;
+    border-radius: 12px;
+    padding: 20px;
     background: #f8fafc;
     transition: all 0.3s ease;
     position: relative;
@@ -279,7 +253,7 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
+    height: 3px;
     background: #3b82f6;
     transform: scaleX(0);
     transition: transform 0.3s ease;
@@ -292,14 +266,14 @@
 .file-header {
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 25px;
+    gap: 15px;
+    margin-bottom: 15px;
 }
 
 .file-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
     background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     display: flex;
     align-items: center;
@@ -308,36 +282,36 @@
 }
 
 .file-icon i {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: white;
 }
 
 .file-info h4 {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     color: #1e293b;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     font-weight: 600;
 }
 
 .file-info p {
     color: #64748b;
-    font-size: 1rem;
-    margin-bottom: 8px;
-    line-height: 1.5;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    line-height: 1.4;
 }
 
 .file-naming-rule {
     color: #6b7280;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-style: italic;
     display: block;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
-/* File Input Styles */
+/* File Input Styles - Single Line Layout */
 .file-input-wrapper {
     position: relative;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .file-input-wrapper input {
@@ -349,20 +323,29 @@
     z-index: 2;
 }
 
+.file-input-line {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
 .file-input-label {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    padding: 18px 24px;
+    gap: 8px;
+    padding: 12px 20px;
     background: white;
     border: 2px dashed #3b82f6;
-    border-radius: 12px;
+    border-radius: 10px;
     color: #3b82f6;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+    min-width: 140px;
 }
 
 .file-input-label:hover {
@@ -374,39 +357,37 @@
 .file-label-text {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .selected-file-name {
-    margin-top: 20px;
-    padding: 20px;
+    flex: 1;
+    padding: 12px 16px;
     background: white;
     border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    text-align: center;
-    min-height: 80px;
+    border-radius: 8px;
+    min-height: 48px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    gap: 8px;
+    justify-content: flex-start;
 }
 
 .file-status-default {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #64748b;
     font-weight: 500;
+    font-family: 'Courier New', monospace;
 }
 
-/* Validation Message Styles */
+/* Validation Message Styles - More Compact */
 .file-validation-status {
     display: block;
     font-weight: 600;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-top: 12px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-top: 8px;
     text-align: center;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     width: 100%;
     box-sizing: border-box;
 }
@@ -429,20 +410,26 @@
     border: 1px solid #a7f3d0;
 }
 
+.file-validation-status.imported {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
 /* Submit Section */
 .submit-section {
     text-align: center;
     border-top: 2px solid #e2e8f0;
-    padding-top: 40px;
-    margin-top: 40px;
+    padding-top: 30px;
+    margin-top: 30px;
 }
 
 .submit-btn {
-    padding: 20px 50px;
-    font-size: 1.2rem;
+    padding: 15px 40px;
+    font-size: 1.1rem;
     background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     color: white;
     font-weight: 700;
     cursor: pointer;
@@ -459,131 +446,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     color: #64748b;
-    font-size: 1rem;
-    margin-top: 20px;
-}
-
-/* Logs Section */
-.logs-section {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 16px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.logs-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #e2e8f0;
-}
-
-.logs-header h3 {
-    color: #1e293b;
-    font-size: 1.3rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0;
-}
-
-.logs-controls {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.btn-refresh {
-    background: #3b82f6;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background 0.3s ease;
-}
-
-.btn-refresh:hover {
-    background: #2563eb;
-}
-
-.btn-refresh:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
-}
-
-.view-all-link {
-    color: #3b82f6;
-    text-decoration: none;
-    font-weight: 500;
     font-size: 0.9rem;
-}
-
-.view-all-link:hover {
-    text-decoration: underline;
-}
-
-.logs-container {
-    max-height: 300px;
-    overflow-y: auto;
-    background: #f8fafc;
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.log-entry {
-    display: flex;
-    gap: 15px;
-    padding: 12px 0;
-    border-bottom: 1px solid #e2e8f0;
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-}
-
-.log-entry:last-child {
-    border-bottom: none;
-}
-
-.log-time {
-    color: #6b7280;
-    min-width: 80px;
-    font-weight: 500;
-    flex-shrink: 0;
-}
-
-.log-message {
-    flex: 1;
-    color: #374151;
-}
-
-/* Log level colors */
-.log-success { color: #059669; }
-.log-error { color: #dc2626; }
-.log-warning { color: #d97706; }
-.log-info { color: #2563eb; }
-
-.logs-footer {
     margin-top: 15px;
-    text-align: center;
-    color: #6b7280;
-    font-size: 0.8rem;
 }
 
 /* Navigation Links */
 .navigation-links {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 25px;
     display: flex;
-    gap: 15px;
+    gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
 }
@@ -591,15 +465,15 @@
 .nav-link, .logout-link {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     color: white;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 0.9rem;
     opacity: 0.9;
     transition: opacity 0.3s ease;
-    padding: 12px 24px;
+    padding: 10px 20px;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
+    border-radius: 6px;
 }
 
 .nav-link:hover, .logout-link:hover {
@@ -609,13 +483,14 @@
 
 /* Alert Styles */
 .alert-message {
-    padding: 18px 24px;
-    border-radius: 12px;
+    padding: 15px 20px;
+    border-radius: 10px;
     margin-bottom: 15px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     animation: slideIn 0.4s ease;
     border-left: 4px solid;
     font-weight: 500;
+    font-size: 0.9rem;
 }
 
 .alert-error {
@@ -636,6 +511,12 @@
     border-left-color: #10b981;
 }
 
+.alert-info {
+    background: #dbeafe;
+    color: #1e40af;
+    border-left-color: #3b82f6;
+}
+
 @keyframes slideIn {
     from { 
         transform: translateX(100%); 
@@ -650,58 +531,208 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .upload-container {
-        padding: 20px 15px;
+        padding: 15px 10px;
     }
     
     .upload-card {
-        padding: 30px 20px;
+        padding: 20px 15px;
     }
     
     .upload-header h1 {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
     }
     
     .file-header {
         flex-direction: column;
         text-align: center;
-        gap: 15px;
+        gap: 12px;
     }
     
     .file-icon {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .file-input-line {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .file-input-label {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .selected-file-name {
+        width: 100%;
+        justify-content: center;
     }
     
     .submit-btn {
-        padding: 16px 40px;
-        font-size: 1.1rem;
-    }
-    
-    .logs-header {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
+        padding: 12px 30px;
+        font-size: 1rem;
     }
     
     .navigation-links {
         flex-direction: column;
         align-items: center;
-    }
-    
-    .log-entry {
-        flex-direction: column;
-        gap: 5px;
-    }
-    
-    .log-time {
-        min-width: auto;
+        gap: 10px;
     }
 }
 </style>
 
 <script>
+
+// Add CSS for the override button
+const overrideStyle = `
+.btn-override {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.btn-override:hover {
+    background: #b91c1c;
+}
+`;
+
+// Inject the styles
+const styleSheet = document.createElement('style');
+styleSheet.textContent = overrideStyle;
+document.head.appendChild(styleSheet);
+
 // Track uploaded files to prevent duplicates - EXACT FILENAME MATCHING
 const uploadedFiles = new Set();
+
+// Store imported files (files that have been imported to staging table)
+const importedFiles = new Set();
+
+// Session storage key for tracking uploaded files during this session
+const SESSION_UPLOADED_KEY = 'sessionUploadedFiles';
+
+// Initialize session tracking
+function initializeSessionTracking() {
+    // Get previously uploaded files from session storage
+    const sessionUploaded = JSON.parse(sessionStorage.getItem(SESSION_UPLOADED_KEY) || '[]');
+    sessionUploaded.forEach(file => {
+        uploadedFiles.add(file);
+    });
+    console.log('Session tracking initialized with files:', Array.from(uploadedFiles));
+}
+
+// Add file to session tracking
+function addToSessionTracking(fileName) {
+    uploadedFiles.add(fileName);
+    
+    // Update session storage
+    const sessionUploaded = Array.from(uploadedFiles);
+    sessionStorage.setItem(SESSION_UPLOADED_KEY, JSON.stringify(sessionUploaded));
+    
+    console.log('Added to session tracking:', fileName);
+    console.log('Current session files:', sessionUploaded);
+}
+
+// Clear session tracking (useful for logout)
+function clearSessionTracking() {
+    uploadedFiles.clear();
+    sessionStorage.removeItem(SESSION_UPLOADED_KEY);
+    console.log('Session tracking cleared');
+}
+// Function to clear session tracking (useful after cancelled imports)
+function clearSessionTrackingForFiles(fileNames) {
+    fileNames.forEach(fileName => {
+        uploadedFiles.delete(fileName);
+    });
+    
+    // Update session storage
+    const sessionUploaded = Array.from(uploadedFiles);
+    sessionStorage.setItem(SESSION_UPLOADED_KEY, JSON.stringify(sessionUploaded));
+    
+    console.log('Cleared session tracking for files:', fileNames);
+    console.log('Remaining session files:', sessionUploaded);
+}
+
+// Function to force allow file upload (admin override)
+async function forceAllowFileUpload(filename, fileType) {
+    try {
+        const response = await fetch('/api/clear-import-tracking', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                filename: filename,
+                type: fileType
+            })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert(`File ${filename} can now be uploaded again`, 'success');
+            // Also clear from session tracking
+            clearSessionTrackingForFiles([filename]);
+            return true;
+        } else {
+            showAlert(`Failed to clear import tracking: ${data.error}`, 'error');
+            return false;
+        }
+    } catch (error) {
+        showAlert(`Error clearing import tracking: ${error.message}`, 'error');
+        return false;
+    }
+}
+
+
+// Check if file is duplicate in current session
+function isDuplicateInSession(fileName) {
+    const isDuplicate = uploadedFiles.has(fileName);
+    console.log(`Checking duplicate for ${fileName}: ${isDuplicate}`);
+    return isDuplicate;
+}
+
+// Function to check if file is already imported to staging table (this would typically call your backend)
+async function checkFileImported(fileName, fileType) {
+    try {
+        // Make API call to check if file has been imported to staging table
+        const response = await fetch(`/api/check-staging-import?filename=${encodeURIComponent(fileName)}&type=${fileType}`);
+        if (response.ok) {
+            const data = await response.json();
+            return data.imported === true; // Returns true if file is already in staging table
+        }
+    } catch (error) {
+        console.error('Error checking file import status:', error);
+    }
+    
+    // Fallback: Check localStorage for demo purposes
+    const storedImported = JSON.parse(localStorage.getItem('importedFiles') || '[]');
+    return storedImported.some(file => 
+        file.name === fileName && file.type === fileType
+    );
+}
+
+// Function to mark file as imported to staging table (this would typically be called by your backend)
+function markFileAsImported(fileName, fileType) {
+    const storedImported = JSON.parse(localStorage.getItem('importedFiles') || '[]');
+    
+    // Check if file is already marked as imported
+    const alreadyImported = storedImported.some(file => file.name === fileName && file.type === fileType);
+    if (!alreadyImported) {
+        storedImported.push({
+            name: fileName,
+            type: fileType,
+            importedAt: new Date().toISOString(),
+            status: 'staging_imported'
+        });
+        localStorage.setItem('importedFiles', JSON.stringify(storedImported));
+        importedFiles.add(fileName);
+    }
+}
 
 // Show alert message at top
 function showAlert(message, type = 'error') {
@@ -709,8 +740,8 @@ function showAlert(message, type = 'error') {
     const alert = document.createElement('div');
     alert.className = `alert-message alert-${type}`;
     alert.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : type === 'warning' ? 'fa-exclamation-triangle' : type === 'info' ? 'fa-info-circle' : 'fa-check-circle'}"></i>
             <span style="flex: 1;">${message}</span>
         </div>
     `;
@@ -742,7 +773,7 @@ const validationPatterns = {
 };
 
 // VALIDATION FUNCTIONS
-function validateB2BFile(file) {
+async function validateB2BFile(file, isFormSubmission = false) {
     const text = document.getElementById('b2bText');
     const msg = document.getElementById('b2bMsg');
     
@@ -784,11 +815,32 @@ function validateB2BFile(file) {
             return false;
         }
         
-        // Check for duplicate file - EXACT FILENAME MATCH
-        if (uploadedFiles.has(file.name)) {
-            msg.textContent = 'File already uploaded recently';
+        // Check if file is already imported to staging table
+        // Check if file is already imported to staging table
+        const isImported = await checkFileImported(file.name, 'b2b');
+        if (isImported) {
+            msg.textContent = '⚠️ File already imported to staging table';
+            msg.classList.add('imported');
+            
+            // Add override button
+            const overrideBtn = document.createElement('button');
+            overrideBtn.textContent = 'Force Upload';
+            overrideBtn.className = 'btn-override';
+            overrideBtn.onclick = () => forceAllowFileUpload(file.name, 'b2b');
+            
+            msg.appendChild(document.createElement('br'));
+            msg.appendChild(overrideBtn);
+            
+            showAlert('❌ File "' + file.name + '" has already been imported to staging table. Cannot upload again.', 'error');
+            return false;
+        }
+        
+        // Check for duplicate file in current session - EXACT FILENAME MATCH
+        // Only check for duplicates during file selection, not during form submission
+        if (!isFormSubmission && isDuplicateInSession(file.name)) {
+            msg.textContent = 'File already uploaded in this session';
             msg.classList.add('warning');
-            showAlert('⚠️ You have uploaded "' + file.name + '" recently! Import procedure stopped. This file will not be imported to staging table.', 'warning');
+            showAlert('⚠️ You have uploaded "' + file.name + '" recently in this session! Please select a different file.', 'warning');
             return false;
         }
         
@@ -802,7 +854,7 @@ function validateB2BFile(file) {
     }
 }
 
-function validateB2CFile(file) {
+async function validateB2CFile(file, isFormSubmission = false) {
     const text = document.getElementById('b2cText');
     const msg = document.getElementById('b2cMsg');
     
@@ -844,11 +896,21 @@ function validateB2CFile(file) {
             return false;
         }
         
-        // Check for duplicate file - EXACT FILENAME MATCH
-        if (uploadedFiles.has(file.name)) {
-            msg.textContent = 'File already uploaded recently';
+        // Check if file is already imported to staging table
+        const isImported = await checkFileImported(file.name, 'b2c');
+        if (isImported) {
+            msg.textContent = '⚠️ File already imported to staging table';
+            msg.classList.add('imported');
+            showAlert('❌ File "' + file.name + '" has already been imported to staging table. Cannot upload again.', 'error');
+            return false;
+        }
+        
+        // Check for duplicate file in current session - EXACT FILENAME MATCH
+        // Only check for duplicates during file selection, not during form submission
+        if (!isFormSubmission && isDuplicateInSession(file.name)) {
+            msg.textContent = 'File already uploaded in this session';
             msg.classList.add('warning');
-            showAlert('⚠️ You have uploaded "' + file.name + '" recently! Import procedure stopped. This file will not be imported to staging table.', 'warning');
+            showAlert('⚠️ You have uploaded "' + file.name + '" recently in this session! Please select a different file.', 'warning');
             return false;
         }
         
@@ -862,7 +924,7 @@ function validateB2CFile(file) {
     }
 }
 
-function validatePayoutFile(file) {
+async function validatePayoutFile(file, isFormSubmission = false) {
     const text = document.getElementById('payoutText');
     const msg = document.getElementById('payoutMsg');
     
@@ -897,11 +959,21 @@ function validatePayoutFile(file) {
             return false;
         }
         
-        // Check for duplicate file - EXACT FILENAME MATCH
-        if (uploadedFiles.has(file.name)) {
-            msg.textContent = 'File already uploaded recently';
+        // Check if file is already imported to staging table
+        const isImported = await checkFileImported(file.name, 'payout');
+        if (isImported) {
+            msg.textContent = '⚠️ File already imported to staging table';
+            msg.classList.add('imported');
+            showAlert('❌ File "' + file.name + '" has already been imported to staging table. Cannot upload again.', 'error');
+            return false;
+        }
+        
+        // Check for duplicate file in current session - EXACT FILENAME MATCH
+        // Only check for duplicates during file selection, not during form submission
+        if (!isFormSubmission && isDuplicateInSession(file.name)) {
+            msg.textContent = 'File already uploaded in this session';
             msg.classList.add('warning');
-            showAlert('⚠️ You have uploaded "' + file.name + '" recently! Import procedure stopped. This file will not be imported to staging table.', 'warning');
+            showAlert('⚠️ You have uploaded "' + file.name + '" recently in this session! Please select a different file.', 'warning');
             return false;
         }
         
@@ -916,10 +988,10 @@ function validatePayoutFile(file) {
 }
 
 // FILE CHANGE EVENT HANDLERS
-document.getElementById('b2bFile').addEventListener('change', function(e) {
+document.getElementById('b2bFile').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (file) {
-        const isValid = validateB2BFile(file);
+        const isValid = await validateB2BFile(file, false); // false = not form submission
         if (!isValid) {
             e.target.value = ''; // Clear invalid file input
         }
@@ -929,10 +1001,10 @@ document.getElementById('b2bFile').addEventListener('change', function(e) {
     }
 });
 
-document.getElementById('b2cFile').addEventListener('change', function(e) {
+document.getElementById('b2cFile').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (file) {
-        const isValid = validateB2CFile(file);
+        const isValid = await validateB2CFile(file, false); // false = not form submission
         if (!isValid) {
             e.target.value = ''; // Clear invalid file input
         }
@@ -942,10 +1014,10 @@ document.getElementById('b2cFile').addEventListener('change', function(e) {
     }
 });
 
-document.getElementById('payoutFile').addEventListener('change', function(e) {
+document.getElementById('payoutFile').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (file) {
-        const isValid = validatePayoutFile(file);
+        const isValid = await validatePayoutFile(file, false); // false = not form submission
         if (!isValid) {
             e.target.value = ''; // Clear invalid file input
         }
@@ -956,23 +1028,49 @@ document.getElementById('payoutFile').addEventListener('change', function(e) {
 });
 
 // FORM SUBMISSION
-document.getElementById('uploadForm').addEventListener('submit', function(e) {
+document.getElementById('uploadForm').addEventListener('submit', async function(e) {
     const b2bFile = document.getElementById('b2bFile').files[0];
     const b2cFile = document.getElementById('b2cFile').files[0];
     const payoutFile = document.getElementById('payoutFile').files[0];
     
     let hasValidFile = false;
+    let validFiles = [];
     
-    // Validate files
-    if (b2bFile) hasValidFile = validateB2BFile(b2bFile) || hasValidFile;
-    if (b2cFile) hasValidFile = validateB2CFile(b2cFile) || hasValidFile;
-    if (payoutFile) hasValidFile = validatePayoutFile(payoutFile) || hasValidFile;
+    // Validate files and collect valid ones - pass true for form submission to skip duplicate check
+    if (b2bFile) {
+        const isValid = await validateB2BFile(b2bFile, true); // true = form submission
+        if (isValid) {
+            hasValidFile = true;
+            validFiles.push({ file: b2bFile, type: 'b2b' });
+        }
+    }
+    if (b2cFile) {
+        const isValid = await validateB2CFile(b2cFile, true); // true = form submission
+        if (isValid) {
+            hasValidFile = true;
+            validFiles.push({ file: b2cFile, type: 'b2c' });
+        }
+    }
+    if (payoutFile) {
+        const isValid = await validatePayoutFile(payoutFile, true); // true = form submission
+        if (isValid) {
+            hasValidFile = true;
+            validFiles.push({ file: payoutFile, type: 'payout' });
+        }
+    }
     
     if (!hasValidFile) {
         e.preventDefault();
         showAlert('Please select at least one valid file to upload', 'error');
         return;
     }
+    
+    // Add valid files to session tracking BEFORE form submission
+    validFiles.forEach(({ file }) => {
+        addToSessionTracking(file.name);
+    });
+    
+    console.log('Files added to session tracking for this upload:', validFiles.map(f => f.file.name));
     
     // Show loading state
     const submitBtn = document.getElementById('submitBtn');
@@ -982,105 +1080,44 @@ document.getElementById('uploadForm').addEventListener('submit', function(e) {
     // Let the form submit normally - backend will redirect to progress page
 });
 
-// Add this JavaScript to handle real-time log updates
-
-let autoRefresh = true;
-let refreshInterval;
-
-// Function to fetch and display recent logs
-async function fetchRecentLogs() {
-    try {
-        const response = await fetch('/api/recent-logs');
-        const logs = await response.json();
-        
-        const logsContainer = document.getElementById('recentLogs');
-        
-        if (logs.length === 0) {
-            logsContainer.innerHTML = `
-                <div class="log-entry">
-                    <div class="log-time">--:--:--</div>
-                    <div class="log-message">No recent import activity. Upload files to see live logs here.</div>
-                </div>
-            `;
-            return;
-        }
-        
-        logsContainer.innerHTML = '';
-        
-        logs.forEach(log => {
-            const logEntry = document.createElement('div');
-            logEntry.className = 'log-entry';
-            
-            const timestamp = new Date(log.timestamp).toLocaleTimeString();
-            const logLevel = log.level.toLowerCase();
-            
-            logEntry.innerHTML = `
-                <div class="log-time">${timestamp}</div>
-                <div class="log-message log-${logLevel}">${log.message}</div>
-            `;
-            
-            logsContainer.appendChild(logEntry);
-        });
-        
-        // Auto-scroll to bottom
-        logsContainer.scrollTop = logsContainer.scrollHeight;
-        
-    } catch (error) {
-        console.error('Error fetching logs:', error);
-    }
-}
-
-// Function to refresh logs
-function refreshLogs() {
-    const refreshBtn = document.querySelector('.btn-refresh');
-    refreshBtn.disabled = true;
-    refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing';
-    
-    fetchRecentLogs().finally(() => {
-        setTimeout(() => {
-            refreshBtn.disabled = false;
-            refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
-        }, 1000);
-    });
-}
-
-// Auto-refresh functionality
-function startAutoRefresh() {
-    if (autoRefresh) {
-        refreshInterval = setInterval(fetchRecentLogs, 5000); // Refresh every 5 seconds
-        document.querySelector('.logs-section').classList.add('auto-refresh-active');
-    }
-}
-
-function stopAutoRefresh() {
-    clearInterval(refreshInterval);
-    document.querySelector('.logs-section').classList.remove('auto-refresh-active');
-}
-
-// Toggle auto-refresh
-function toggleAutoRefresh() {
-    autoRefresh = !autoRefresh;
-    if (autoRefresh) {
-        startAutoRefresh();
-    } else {
-        stopAutoRefresh();
-    }
-}
-
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    fetchRecentLogs();
-    startAutoRefresh();
+    // Initialize session tracking
+    initializeSessionTracking();
     
-    // Also fetch logs when coming back from progress page
-    if (performance.navigation.type === 1) { // Page reload
-        setTimeout(fetchRecentLogs, 1000);
-    }
+    // Initialize imported files from localStorage
+    const storedImported = JSON.parse(localStorage.getItem('importedFiles') || '[]');
+    storedImported.forEach(file => {
+        importedFiles.add(file.name);
+    });
+    
+    console.log('Page initialized. Session files:', Array.from(uploadedFiles));
+    console.log('Imported files:', Array.from(importedFiles));
 });
 
-// Clean up on page unload
-window.addEventListener('beforeunload', function() {
-    stopAutoRefresh();
-});
+// Clear session tracking when user logs out (optional enhancement)
+// You can call this function when logout is clicked
+function prepareForLogout() {
+    clearSessionTracking();
+    console.log('Session tracking cleared for logout');
+}
+
+// Demo function to simulate file import to staging table (for testing)
+// In your backend, call markFileAsImported() when a file is successfully imported to staging
+function demoMarkFileAsImported(fileName, fileType) {
+    markFileAsImported(fileName, fileType);
+    showAlert(`Demo: File "${fileName}" marked as imported to staging table`, 'success');
+}
+
+// Utility function to view current session state (for debugging)
+function debugSessionState() {
+    console.log('=== DEBUG SESSION STATE ===');
+    console.log('Uploaded Files (Session):', Array.from(uploadedFiles));
+    console.log('Session Storage:', sessionStorage.getItem(SESSION_UPLOADED_KEY));
+    console.log('Imported Files (Persistent):', Array.from(importedFiles));
+    console.log('Local Storage:', localStorage.getItem('importedFiles'));
+    console.log('==========================');
+}
 </script>
+
 {% endblock %}
