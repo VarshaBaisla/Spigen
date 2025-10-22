@@ -1,54 +1,332 @@
 {% extends "base.html" %}
-
+{% block title %}System Logs - Data Upload Portal{% endblock %}
 {% block content %}
-<div class="container">
-    <h1>Import Logs</h1>
-    
-    <div class="row">
-        <div class="col-md-6">
-            <h3>File Logs (Recent 100 entries)</h3>
-            <div style="max-height: 400px; overflow-y: auto; background: #f8f9fa; padding: 10px; border-radius: 5px;">
-                {% for log in file_logs %}
-                    <div style="font-family: monospace; font-size: 12px; margin-bottom: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
-                        {{ log }}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        
-        <div class="col-md-6">
-            <h3>Database Logs (Recent 50 entries)</h3>
-            <div style="max-height: 400px; overflow-y: auto;">
-                <table class="table table-sm table-striped">
-                    <thead>
-                        <tr>
-                            <th>Batch ID</th>
-                            <th>Procedure</th>
-                            <th>Status</th>
-                            <th>Records</th>
-                            <th>Message</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for log in db_logs %}
-                        <tr>
-                            <td title="{{ log[0] }}">{{ log[0][:8] }}...</td>
-                            <td>{{ log[1] }}</td>
-                            <td>
-                                <span class="badge {% if log[3] == 'success' %}bg-success{% elif log[3] == 'error' %}bg-danger{% else %}bg-warning{% endif %}">
-                                    {{ log[3] }}
-                                </span>
-                            </td>
-                            <td>{{ log[4] }}</td>
-                            <td title="{{ log[5] }}">{{ log[5][:30] }}{% if log[5]|length > 30 %}...{% endif %}</td>
-                            <td>{{ log[6].strftime('%H:%M:%S') }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+<div class="upload-container">
+    <div class="upload-header">
+        <h1>System Logs</h1>
+        <p>Monitor import activities and system events</p>
+    </div>
+
+    <!-- System Status Overview -->
+    <div class="upload-card">
+        <div class="form-section">
+            <h3 class="section-title">System Status</h3>
+            <div class="status-overview">
+                <div class="status-item">
+                    <div class="status-label">Active Imports</div>
+                    <div class="status-value">{{ active_imports|length }}</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Active Requests</div>
+                    <div class="status-value">{{ active_requests|length }}</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Database Logs</div>
+                    <div class="status-value">{{ db_logs|length }}</div>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Database Logs -->
+    <div class="upload-card">
+        <div class="form-section">
+            <div class="logs-header">
+                <h3 class="section-title"><i class="fas fa-database"></i> Database Import Logs</h3>
+                <div class="logs-controls">
+                    <button onclick="refreshLogs()" class="btn-refresh">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="logs-container" id="dbLogs">
+                {% if db_logs %}
+                    {% for log in db_logs %}
+                    <div class="log-entry">
+                        <div class="log-time">{{ log[6].strftime('%H:%M:%S') if log[6] else '--:--:--' }}</div>
+                        <div class="log-message log-{{ log[3] }}">
+                            <strong>{{ log[1] }}</strong> - {{ log[2] }} | 
+                            Status: <span class="status-{{ log[3] }}">{{ log[3] }}</span> | 
+                            Records: {{ log[4] }} | 
+                            {{ log[5] }}
+                            {% if log[0] %}
+                            <br><small>Batch: {{ log[0][:8] }}...</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="log-entry">
+                        <div class="log-time">--:--:--</div>
+                        <div class="log-message">No database logs available</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- File Logs -->
+    <div class="upload-card">
+        <div class="form-section">
+            <div class="logs-header">
+                <h3 class="section-title"><i class="fas fa-file-alt"></i> Application Logs</h3>
+                <div class="logs-controls">
+                    <button onclick="refreshFileLogs()" class="btn-refresh">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="logs-container" id="fileLogs">
+                {% if file_logs %}
+                    {% for log in file_logs[-50:] %}  <!-- Show last 50 entries -->
+                    <div class="log-entry">
+                        <div class="log-time">--:--:--</div>
+                        <div class="log-message">{{ log.strip() }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="log-entry">
+                        <div class="log-time">--:--:--</div>
+                        <div class="log-message">No application logs available</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="navigation-links">
+        <a href="{{ url_for('upload') }}" class="nav-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Upload
+        </a>
+        <a href="{{ url_for('import_progress') }}" class="nav-link">
+            <i class="fas fa-chart-line"></i>
+            View Import Progress
+        </a>
+        <a href="{{ url_for('logout') }}" class="logout-link">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
+    </div>
 </div>
+
+<style>
+.status-overview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.status-item {
+    text-align: center;
+    padding: 25px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+}
+
+.status-label {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.status-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3b82f6;
+}
+
+.status-success { color: #059669; }
+.status-error { color: #dc2626; }
+.status-warning { color: #d97706; }
+.status-info { color: #2563eb; }
+
+.logs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.logs-header h3 {
+    color: #1e293b;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.btn-refresh {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.3s ease;
+}
+
+.btn-refresh:hover {
+    background: #2563eb;
+}
+
+.logs-container {
+    max-height: 400px;
+    overflow-y: auto;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.log-entry {
+    display: flex;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+}
+
+.log-time {
+    color: #6b7280;
+    min-width: 80px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.log-message {
+    flex: 1;
+    color: #374151;
+    line-height: 1.4;
+}
+
+/* Log level colors */
+.log-success { color: #059669; }
+.log-error { color: #dc2626; }
+.log-warning { color: #d97706; }
+.log-info { color: #2563eb; }
+
+.status-success { color: #059669; }
+.status-error { color: #dc2626; }
+.status-warning { color: #d97706; }
+.status-info { color: #2563eb; }
+
+.navigation-links {
+    text-align: center;
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.nav-link, .logout-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    padding: 12px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+}
+
+.nav-link:hover, .logout-link:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .status-overview {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .status-item {
+        padding: 20px;
+    }
+    
+    .status-value {
+        font-size: 1.5rem;
+    }
+    
+    .logs-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .log-entry {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .log-time {
+        min-width: auto;
+    }
+    
+    .navigation-links {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
+
+<script>
+function refreshLogs() {
+    const refreshBtn = document.querySelector('.btn-refresh');
+    refreshBtn.disabled = true;
+    refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing';
+    
+    // Reload the page to get fresh logs
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
+}
+
+function refreshFileLogs() {
+    const refreshBtn = document.querySelectorAll('.btn-refresh')[1];
+    refreshBtn.disabled = true;
+    refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing';
+    
+    // Reload the page to get fresh logs
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
+}
+
+// Auto-scroll to bottom of logs
+document.addEventListener('DOMContentLoaded', function() {
+    const dbLogs = document.getElementById('dbLogs');
+    const fileLogs = document.getElementById('fileLogs');
+    
+    if (dbLogs) {
+        dbLogs.scrollTop = dbLogs.scrollHeight;
+    }
+    if (fileLogs) {
+        fileLogs.scrollTop = fileLogs.scrollHeight;
+    }
+});
+</script>
 {% endblock %}

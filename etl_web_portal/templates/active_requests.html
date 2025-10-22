@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Active Requests - Data Upload Portal{% endblock %}
+{% block content %}
+<div class="upload-container">
+    <div class="upload-header">
+        <h1>Active Requests</h1>
+        <p>Monitor currently processing upload requests</p>
+    </div>
+
+    <div class="upload-card">
+        <div class="form-section">
+            <h3 class="section-title">Currently Active Requests</h3>
+            
+            {% if active_requests %}
+            <div class="requests-table">
+                <div class="table-header">
+                    <div class="table-cell">Fingerprint</div>
+                    <div class="table-cell">Started</div>
+                    <div class="table-cell">Age</div>
+                </div>
+                {% for request in active_requests %}
+                <div class="table-row">
+                    <div class="table-cell fingerprint">{{ request.fingerprint }}</div>
+                    <div class="table-cell">{{ request.started }}</div>
+                    <div class="table-cell">{{ "%.1f"|format(request.age_seconds) }} seconds</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-requests">
+                <i class="fas fa-check-circle"></i>
+                <p>No active requests currently processing</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="navigation-links">
+        <a href="{{ url_for('upload') }}" class="nav-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Upload
+        </a>
+        <a href="{{ url_for('view_logs') }}" class="nav-link">
+            <i class="fas fa-history"></i>
+            View System Logs
+        </a>
+        <a href="{{ url_for('logout') }}" class="logout-link">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
+    </div>
+</div>
+
+<style>
+.requests-table {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background: #3b82f6;
+    color: white;
+    font-weight: 600;
+    padding: 15px 20px;
+}
+
+.table-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 12px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    background: white;
+    transition: background 0.3s ease;
+}
+
+.table-row:hover {
+    background: #f8fafc;
+}
+
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.table-cell {
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+}
+
+.fingerprint {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.no-requests {
+    text-align: center;
+    padding: 40px;
+    color: #64748b;
+}
+
+.no-requests i {
+    font-size: 3rem;
+    color: #10b981;
+    margin-bottom: 20px;
+}
+
+.no-requests p {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .table-header,
+    .table-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .table-cell {
+        padding: 4px 0;
+    }
+    
+    .fingerprint {
+        word-break: break-all;
+    }
+}
+</style>
+{% endblock %}

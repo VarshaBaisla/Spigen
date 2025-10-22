@@ -1,7 +1,10 @@
 {% extends "base.html" %}
-
+{% block title %}Data Upload - Data Upload Portal{% endblock %}
 {% block content %}
 <div class="upload-container">
+    
+    <div id="alertContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1000; max-width: 400px;"></div>
+    
     <div class="upload-header">
         <h1>Data Upload</h1>
         <p>Upload your B2B, B2C, and Payout files</p>
@@ -30,7 +33,7 @@
                 
                 <div class="file-upload-section">
                     <!-- B2B File -->
-                    <div class="file-upload-group">
+                    <div class="file-upload-group" id="b2bBox">
                         <div class="file-header">
                             <div class="file-icon">
                                 <i class="fas fa-building"></i>
@@ -38,20 +41,25 @@
                             <div class="file-info">
                                 <h4>B2B File</h4>
                                 <p>Business-to-business transaction data</p>
+                                <small class="file-naming-rule">Expected formats: MTR_B2B-MONTH-YEAR.csv or MTR_B2B-MONTH-YEAR-UNIQUEID.csv</small>
+                                <small class="file-naming-rule">Example: MTR_B2B-APRIL-2024.csv or MTR_B2B-APRIL-2024-A21X0IZWUD6LPQ.csv</small>
                             </div>
                         </div>
                         <div class="file-input-wrapper">
-                            <input type="file" id="b2b_file" name="b2b_file" accept=".csv,.xlsx,.xls" required>
-                            <label for="b2b_file" class="file-input-label">
+                            <input type="file" id="b2bFile" name="b2b_file" accept=".csv">
+                            <label for="b2bFile" class="file-input-label">
                                 <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Choose File</span>
+                                <span class="file-label-text">Choose B2B File</span>
                             </label>
+                            <div class="selected-file-name">
+                                <div class="file-status-default" id="b2bText">No file chosen</div>
+                                <div class="file-validation-status" id="b2bMsg"></div>
+                            </div>
                         </div>
-                        <div class="file-preview" id="b2b-preview"></div>
                     </div>
 
                     <!-- B2C File -->
-                    <div class="file-upload-group">
+                    <div class="file-upload-group" id="b2cBox">
                         <div class="file-header">
                             <div class="file-icon">
                                 <i class="fas fa-users"></i>
@@ -59,20 +67,25 @@
                             <div class="file-info">
                                 <h4>B2C File</h4>
                                 <p>Business-to-consumer transaction data</p>
+                                <small class="file-naming-rule">Expected formats: MTR_B2C-MONTH-YEAR.csv or MTR_B2C-MONTH-YEAR-UNIQUEID.csv</small>
+                                <small class="file-naming-rule">Example: MTR_B2C-APRIL-2024.csv or MTR_B2C-APRIL-2024-A21X0IZWUD6LPQ.csv</small>
                             </div>
                         </div>
                         <div class="file-input-wrapper">
-                            <input type="file" id="b2c_file" name="b2c_file" accept=".csv,.xlsx,.xls" required>
-                            <label for="b2c_file" class="file-input-label">
+                            <input type="file" id="b2cFile" name="b2c_file" accept=".csv">
+                            <label for="b2cFile" class="file-input-label">
                                 <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Choose File</span>
+                                <span class="file-label-text">Choose B2C File</span>
                             </label>
+                            <div class="selected-file-name">
+                                <div class="file-status-default" id="b2cText">No file chosen</div>
+                                <div class="file-validation-status" id="b2cMsg"></div>
+                            </div>
                         </div>
-                        <div class="file-preview" id="b2c-preview"></div>
                     </div>
 
                     <!-- Payout File -->
-                    <div class="file-upload-group">
+                    <div class="file-upload-group" id="payoutBox">
                         <div class="file-header">
                             <div class="file-icon">
                                 <i class="fas fa-money-bill-wave"></i>
@@ -80,37 +93,74 @@
                             <div class="file-info">
                                 <h4>Payout File</h4>
                                 <p>Financial payout and reconciliation data</p>
+                                <small class="file-naming-rule">Expected formats: YYYYMMMonthlyUnifiedTransaction.csv or PLATFORM_Payout_Month_Year.csv</small>
+                                <small class="file-naming-rule">Example: 2024AugMonthlyUnifiedTransaction.csv or AMZ_Payout_Apr_2024.csv</small>
                             </div>
                         </div>
                         <div class="file-input-wrapper">
-                            <input type="file" id="payout_file" name="payout_file" accept=".csv,.xlsx,.xls" required>
-                            <label for="payout_file" class="file-input-label">
+                            <input type="file" id="payoutFile" name="payout_file" accept=".csv">
+                            <label for="payoutFile" class="file-input-label">
                                 <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Choose File</span>
+                                <span class="file-label-text">Choose Payout File</span>
                             </label>
+                            <div class="selected-file-name">
+                                <div class="file-status-default" id="payoutText">No file chosen</div>
+                                <div class="file-validation-status" id="payoutMsg"></div>
+                            </div>
                         </div>
-                        <div class="file-preview" id="payout-preview"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Submit Section -->
             <div class="form-section submit-section">
-                <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">
+                <button type="submit" class="btn btn-primary submit-btn" id="submitBtn">
                     <i class="fas fa-rocket"></i>
-                    Process Files
+                    Start Automated Import
                 </button>
                 
                 <div class="upload-info">
                     <i class="fas fa-info-circle"></i>
-                    <span>Supported formats: CSV, XLSX, XLS </span>
+                    <span>Files will be processed automatically through staging → final tables → reconciliation</span>
                 </div>
             </div>
         </form>
     </div>
 
-    <!-- Navigation -->
+    <!-- Recent Activity Logs -->
+    <div class="logs-section">
+        <div class="logs-header">
+            <h3><i class="fas fa-history"></i> Recent Import Activity</h3>
+            <div class="logs-controls">
+                <button onclick="refreshLogs()" class="btn-refresh">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <a href="{{ url_for('view_logs') }}" class="view-all-link">View All Logs</a>
+            </div>
+        </div>
+        
+        <div class="logs-container" id="recentLogs">
+            <div class="log-entry">
+                <div class="log-time">--:--:--</div>
+                <div class="log-message">No recent import activity. Upload files to see live logs here.</div>
+            </div>
+            <!-- Logs will be dynamically added here -->
+        </div>
+        
+        <div class="logs-footer">
+            <small><i class="fas fa-info-circle"></i> Logs update automatically during imports</small>
+        </div>
+    </div>
+
     <div class="navigation-links">
+        <a href="{{ url_for('import_progress') }}" class="nav-link">
+            <i class="fas fa-chart-line"></i>
+            View Import Progress
+        </a>
+        <a href="{{ url_for('view_logs') }}" class="nav-link">
+            <i class="fas fa-history"></i>
+            View System Logs
+        </a>
         <a href="{{ url_for('logout') }}" class="logout-link">
             <i class="fas fa-sign-out-alt"></i>
             Logout
@@ -119,320 +169,918 @@
 </div>
 
 <style>
+/* Main Container Styles */
+.upload-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    min-height: 100vh;
+}
+
+.upload-header {
+    text-align: center;
+    margin-bottom: 40px;
+    color: white;
+}
+
+.upload-header h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.upload-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+.upload-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding: 50px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 30px;
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 50px;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 1.1rem;
+}
+
+.form-label i {
+    color: #3b82f6;
+    font-size: 1.2rem;
+}
+
+.form-select {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: white;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: #1e293b;
+    font-weight: 700;
+    border-bottom: 3px solid #3b82f6;
+    padding-bottom: 15px;
+}
+
+/* File Upload Sections */
+.file-upload-section {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.file-upload-group {
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 30px;
+    background: #f8fafc;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.file-upload-group::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #3b82f6;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.file-upload-group:hover::before {
+    transform: scaleX(1);
+}
+
+.file-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.file-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.file-icon i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.file-info h4 {
+    font-size: 1.3rem;
+    color: #1e293b;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.file-info p {
+    color: #64748b;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.file-naming-rule {
+    color: #6b7280;
+    font-size: 0.85rem;
+    font-style: italic;
+    display: block;
+    margin-top: 4px;
+}
+
+/* File Input Styles */
+.file-input-wrapper {
+    position: relative;
+    margin-top: 20px;
+}
+
+.file-input-wrapper input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.file-input-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px 24px;
+    background: white;
+    border: 2px dashed #3b82f6;
+    border-radius: 12px;
+    color: #3b82f6;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.file-input-label:hover {
+    background: #3b82f6;
+    color: white;
+    border-style: solid;
+}
+
+.file-label-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.selected-file-name {
+    margin-top: 20px;
+    padding: 20px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    text-align: center;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.file-status-default {
+    font-size: 1rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Validation Message Styles */
+.file-validation-status {
+    display: block;
+    font-weight: 600;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: 12px;
+    text-align: center;
+    font-size: 0.95rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.file-validation-status.error {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.file-validation-status.warning {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+}
+
+.file-validation-status.success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+/* Submit Section */
+.submit-section {
+    text-align: center;
+    border-top: 2px solid #e2e8f0;
+    padding-top: 40px;
+    margin-top: 40px;
+}
+
+.submit-btn {
+    padding: 20px 50px;
+    font-size: 1.2rem;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.upload-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #64748b;
+    font-size: 1rem;
+    margin-top: 20px;
+}
+
+/* Logs Section */
+.logs-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.logs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.logs-header h3 {
+    color: #1e293b;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.logs-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-refresh {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.3s ease;
+}
+
+.btn-refresh:hover {
+    background: #2563eb;
+}
+
+.btn-refresh:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+.view-all-link {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.view-all-link:hover {
+    text-decoration: underline;
+}
+
+.logs-container {
+    max-height: 300px;
+    overflow-y: auto;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.log-entry {
+    display: flex;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+}
+
+.log-time {
+    color: #6b7280;
+    min-width: 80px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.log-message {
+    flex: 1;
+    color: #374151;
+}
+
+/* Log level colors */
+.log-success { color: #059669; }
+.log-error { color: #dc2626; }
+.log-warning { color: #d97706; }
+.log-info { color: #2563eb; }
+
+.logs-footer {
+    margin-top: 15px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.8rem;
+}
+
+/* Navigation Links */
+.navigation-links {
+    text-align: center;
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.nav-link, .logout-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    padding: 12px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+}
+
+.nav-link:hover, .logout-link:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Alert Styles */
+.alert-message {
+    padding: 18px 24px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.4s ease;
+    border-left: 4px solid;
+    font-weight: 500;
+}
+
+.alert-error {
+    background: #fee2e2;
+    color: #dc2626;
+    border-left-color: #dc2626;
+}
+
+.alert-warning {
+    background: #fef3c7;
+    color: #92400e;
+    border-left-color: #f59e0b;
+}
+
+.alert-success {
+    background: #d1fae5;
+    color: #065f46;
+    border-left-color: #10b981;
+}
+
+@keyframes slideIn {
+    from { 
+        transform: translateX(100%); 
+        opacity: 0; 
+    }
+    to { 
+        transform: translateX(0); 
+        opacity: 1; 
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
     .upload-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px 0;
+        padding: 20px 15px;
     }
-
-    .upload-header {
-        text-align: center;
-        margin-bottom: 40px;
-    }
-
-    .upload-header h1 {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 10px;
-        opacity: 0.9;
-    }
-
-    .upload-header p {
-        font-size: 1.1rem;
-        opacity: 0.8;
-    }
-
+    
     .upload-card {
-        background: rgba(255,255,255,0.95);
-        border-radius: var(--border-radius);
-        box-shadow: var(--shadow);
-        padding: 40px;
-        margin-bottom: 30px;
-        color: var(--dark);
+        padding: 30px 20px;
     }
-
-    .form-section {
-        margin-bottom: 40px;
+    
+    .upload-header h1 {
+        font-size: 2.2rem;
     }
-
-    .form-group {
-        margin-bottom: 25px;
-    }
-
-    .form-label {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: var(--dark);
-        font-size: 1rem;
-    }
-
-    .form-label i {
-        color: var(--primary);
-    }
-
-    .form-select {
-        width: 100%;
-        padding: 14px 16px;
-        border: 2px solid #e2e8f0;
-        border-radius: var(--border-radius);
-        font-size: 1rem;
-        background: white;
-        transition: var(--transition);
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-        background-position: right 12px center;
-        background-repeat: no-repeat;
-        background-size: 16px;
-    }
-
-    .form-select:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    }
-
-    .section-title {
-        font-size: 1.3rem;
-        margin-bottom: 25px;
-        color: var(--dark);
-        font-weight: 600;
-        border-bottom: 2px solid #e2e8f0;
-        padding-bottom: 10px;
-    }
-
-    .file-upload-section {
-        display: flex;
-        flex-direction: column;
-        gap: 25px;
-    }
-
-    .file-upload-group {
-        border: 2px solid #e2e8f0;
-        border-radius: var(--border-radius);
-        padding: 25px;
-        transition: var(--transition);
-        background: #f8fafc;
-    }
-
-    .file-upload-group:hover {
-        border-color: var(--primary);
-        background: white;
-    }
-
+    
     .file-header {
-        display: flex;
-        align-items: center;
+        flex-direction: column;
+        text-align: center;
         gap: 15px;
-        margin-bottom: 20px;
     }
-
+    
     .file-icon {
         width: 50px;
         height: 50px;
-        border-radius: var(--border-radius);
-        background: linear-gradient(135deg, var(--primary), #3b82f6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
-
-    .file-icon i {
-        font-size: 1.3rem;
-        color: white;
-    }
-
-    .file-info h4 {
-        font-size: 1.1rem;
-        color: var(--dark);
-        margin-bottom: 5px;
-    }
-
-    .file-info p {
-        color: var(--gray);
-        font-size: 0.9rem;
-    }
-
-    .file-input-wrapper {
-        position: relative;
-    }
-
-    .file-input-wrapper input {
-        position: absolute;
-        opacity: 0;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-    }
-
-    .file-input-label {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 12px 20px;
-        background: white;
-        border: 2px solid var(--primary);
-        border-radius: var(--border-radius);
-        color: var(--primary);
-        font-weight: 500;
-        cursor: pointer;
-        transition: var(--transition);
-    }
-
-    .file-input-label:hover {
-        background: var(--primary);
-        color: white;
-    }
-
-    .file-preview {
-        margin-top: 15px;
-        padding: 12px;
-        background: white;
-        border-radius: var(--border-radius);
-        font-size: 0.85rem;
-        color: var(--gray);
-        display: none;
-        border: 1px solid #e2e8f0;
-    }
-
-    .file-preview.active {
-        display: block;
-        animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .submit-section {
-        text-align: center;
-        border-top: 2px solid #e2e8f0;
-        padding-top: 30px;
-    }
-
+    
     .submit-btn {
         padding: 16px 40px;
         font-size: 1.1rem;
-        margin-bottom: 15px;
     }
-
-    .upload-info {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        color: var(--gray);
-        font-size: 0.9rem;
+    
+    .logs-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
     }
-
+    
     .navigation-links {
-        text-align: center;
-    }
-
-    .logout-link {
-        display: inline-flex;
+        flex-direction: column;
         align-items: center;
-        gap: 8px;
-        color: white;
-        text-decoration: none;
-        font-size: 0.9rem;
-        transition: var(--transition);
-        opacity: 0.8;
     }
-
-    .logout-link:hover {
-        opacity: 1;
+    
+    .log-entry {
+        flex-direction: column;
+        gap: 5px;
     }
+    
+    .log-time {
+        min-width: auto;
+    }
+}
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('uploadForm');
-        const submitBtn = document.getElementById('submit-btn');
-        const fileInputs = document.querySelectorAll('input[type="file"]');
-        
-        // File selection preview
-        fileInputs.forEach(input => {
-            input.addEventListener('change', function() {
-                const file = this.files[0];
-                const previewId = this.id + '-preview';
-                const preview = document.getElementById(previewId);
-                
-                if (file) {
-                    const fileSize = (file.size / (1024 * 1024)).toFixed(2);
-                    preview.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-file" style="color: #2563eb;"></i>
-                            <div>
-                                <div style="font-weight: 500;">${file.name}</div>
-                                <div style="font-size: 0.8rem; color: #64748b;">${fileSize} MB</div>
-                            </div>
-                        </div>
-                    `;
-                    preview.classList.add('active');
-                } else {
-                    preview.classList.remove('active');
-                }
-            });
-        });
-        
-        // Form submission handler
-        form.addEventListener('submit', function(e) {
-            const platform = document.getElementById('platform').value;
-            const filesSelected = Array.from(fileInputs).some(input => input.files.length > 0);
-            
-            if (!platform) {
-                e.preventDefault();
-                showToast('Please select a platform', 'warning');
-                return false;
+// Track uploaded files to prevent duplicates - EXACT FILENAME MATCHING
+const uploadedFiles = new Set();
+
+// Show alert message at top
+function showAlert(message, type = 'error') {
+    const alertContainer = document.getElementById('alertContainer');
+    const alert = document.createElement('div');
+    alert.className = `alert-message alert-${type}`;
+    alert.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+            <span style="flex: 1;">${message}</span>
+        </div>
+    `;
+    
+    alertContainer.appendChild(alert);
+    
+    // Remove alert after 5 seconds
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        alert.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.parentNode.removeChild(alert);
             }
-            
-            if (!filesSelected) {
-                e.preventDefault();
-                showToast('Please select at least one file to upload', 'warning');
-                return false;
-            }
-            
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing... Please Wait';
-            
-            return true;
-        });
+        }, 500);
+    }, 5000);
+}
+
+// VALIDATION PATTERNS
+const validationPatterns = {
+    // B2B: MTR_B2B-MONTH-YEAR.csv or MTR_B2B-MONTH-YEAR-UNIQUEID.csv
+    b2b: /^MTR_B2B-(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)-\d{4}(-[A-Z0-9]+)?\.csv$/i,
+    
+    // B2C: MTR_B2C-MONTH-YEAR.csv or MTR_B2C-MONTH-YEAR-UNIQUEID.csv  
+    b2c: /^MTR_B2C-(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)-\d{4}(-[A-Z0-9]+)?\.csv$/i,
+    
+    // Payout: YYYYMMMonthlyUnifiedTransaction.csv or PLATFORM_Payout_Month_Year.csv
+    payout: /^(\d{4}[A-Z]{3}MonthlyUnifiedTransaction|(AMZ|JIO)_Payout_(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)_\d{4})\.csv$/i
+};
+
+// VALIDATION FUNCTIONS
+function validateB2BFile(file) {
+    const text = document.getElementById('b2bText');
+    const msg = document.getElementById('b2bMsg');
+    
+    // Reset message
+    msg.textContent = '';
+    msg.className = 'file-validation-status';
+    
+    if (file) {
+        text.textContent = file.name;
         
-        function showToast(message, type) {
-            // Create toast element
-            const toast = document.createElement('div');
-            toast.className = `alert alert-${type}`;
-            toast.innerHTML = `
-                <i class="fas fa-${getIcon(type)}"></i>
-                <span>${message}</span>
+        // Check for CSV
+        if (!file.name.toLowerCase().endsWith('.csv')) {
+            msg.textContent = 'Please upload CSV files only';
+            msg.classList.add('error');
+            showAlert('Please upload CSV files only', 'error');
+            return false;
+        }
+        
+        // Check for wrong file type in B2B
+        if (file.name.includes('B2C')) {
+            msg.textContent = 'This is a B2C file';
+            msg.classList.add('error');
+            showAlert('❌ Wrong file type! Please select proper B2B file for B2B section.', 'error');
+            return false;
+        }
+        
+        if (file.name.includes('MonthlyUnifiedTransaction') || file.name.includes('_Payout_')) {
+            msg.textContent = 'This is a Payout file';
+            msg.classList.add('error');
+            showAlert('❌ Wrong file type! Please select proper B2B file for B2B section.', 'error');
+            return false;
+        }
+        
+        // Check B2B pattern
+        if (!validationPatterns.b2b.test(file.name)) {
+            msg.textContent = 'Invalid B2B file format';
+            msg.classList.add('error');
+            showAlert('Please select proper B2B file (MTR_B2B-MONTH-YEAR.csv or MTR_B2B-MONTH-YEAR-UNIQUEID.csv)', 'error');
+            return false;
+        }
+        
+        // Check for duplicate file - EXACT FILENAME MATCH
+        if (uploadedFiles.has(file.name)) {
+            msg.textContent = 'File already uploaded recently';
+            msg.classList.add('warning');
+            showAlert('⚠️ You have uploaded "' + file.name + '" recently! Import procedure stopped. This file will not be imported to staging table.', 'warning');
+            return false;
+        }
+        
+        // Valid file
+        msg.textContent = '✓ Valid B2B file - Ready to upload';
+        msg.classList.add('success');
+        return true;
+    } else {
+        text.textContent = 'No file chosen';
+        return false;
+    }
+}
+
+function validateB2CFile(file) {
+    const text = document.getElementById('b2cText');
+    const msg = document.getElementById('b2cMsg');
+    
+    // Reset message
+    msg.textContent = '';
+    msg.className = 'file-validation-status';
+    
+    if (file) {
+        text.textContent = file.name;
+        
+        // Check for CSV
+        if (!file.name.toLowerCase().endsWith('.csv')) {
+            msg.textContent = 'Please upload CSV files only';
+            msg.classList.add('error');
+            showAlert('Please upload CSV files only', 'error');
+            return false;
+        }
+        
+        // Check for wrong file type in B2C
+        if (file.name.includes('B2B')) {
+            msg.textContent = 'This is a B2B file';
+            msg.classList.add('error');
+            showAlert('❌ Wrong file type! Please select proper B2C file for B2C section.', 'error');
+            return false;
+        }
+        
+        if (file.name.includes('MonthlyUnifiedTransaction') || file.name.includes('_Payout_')) {
+            msg.textContent = 'This is a Payout file';
+            msg.classList.add('error');
+            showAlert('❌ Wrong file type! Please select proper B2C file for B2C section.', 'error');
+            return false;
+        }
+        
+        // Check B2C pattern
+        if (!validationPatterns.b2c.test(file.name)) {
+            msg.textContent = 'Invalid B2C file format';
+            msg.classList.add('error');
+            showAlert('Please select proper B2C file (MTR_B2C-MONTH-YEAR.csv or MTR_B2C-MONTH-YEAR-UNIQUEID.csv)', 'error');
+            return false;
+        }
+        
+        // Check for duplicate file - EXACT FILENAME MATCH
+        if (uploadedFiles.has(file.name)) {
+            msg.textContent = 'File already uploaded recently';
+            msg.classList.add('warning');
+            showAlert('⚠️ You have uploaded "' + file.name + '" recently! Import procedure stopped. This file will not be imported to staging table.', 'warning');
+            return false;
+        }
+        
+        // Valid file
+        msg.textContent = '✓ Valid B2C file - Ready to upload';
+        msg.classList.add('success');
+        return true;
+    } else {
+        text.textContent = 'No file chosen';
+        return false;
+    }
+}
+
+function validatePayoutFile(file) {
+    const text = document.getElementById('payoutText');
+    const msg = document.getElementById('payoutMsg');
+    
+    // Reset message
+    msg.textContent = '';
+    msg.className = 'file-validation-status';
+    
+    if (file) {
+        text.textContent = file.name;
+        
+        // Check for CSV
+        if (!file.name.toLowerCase().endsWith('.csv')) {
+            msg.textContent = 'Please upload CSV files only';
+            msg.classList.add('error');
+            showAlert('Please upload CSV files only', 'error');
+            return false;
+        }
+        
+        // Check for wrong file type in Payout
+        if (file.name.includes('B2B') || file.name.includes('B2C')) {
+            msg.textContent = 'This is a B2B/B2C file';
+            msg.classList.add('error');
+            showAlert('❌ Wrong file type! Please select proper Payout file for Payout section.', 'error');
+            return false;
+        }
+        
+        // Check Payout pattern
+        if (!validationPatterns.payout.test(file.name)) {
+            msg.textContent = 'Invalid Payout file format';
+            msg.classList.add('error');
+            showAlert('Please select proper Payout file (YYYYMMMonthlyUnifiedTransaction.csv or PLATFORM_Payout_Month_Year.csv)', 'error');
+            return false;
+        }
+        
+        // Check for duplicate file - EXACT FILENAME MATCH
+        if (uploadedFiles.has(file.name)) {
+            msg.textContent = 'File already uploaded recently';
+            msg.classList.add('warning');
+            showAlert('⚠️ You have uploaded "' + file.name + '" recently! Import procedure stopped. This file will not be imported to staging table.', 'warning');
+            return false;
+        }
+        
+        // Valid file
+        msg.textContent = '✓ Valid Payout file - Ready to upload';
+        msg.classList.add('success');
+        return true;
+    } else {
+        text.textContent = 'No file chosen';
+        return false;
+    }
+}
+
+// FILE CHANGE EVENT HANDLERS
+document.getElementById('b2bFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const isValid = validateB2BFile(file);
+        if (!isValid) {
+            e.target.value = ''; // Clear invalid file input
+        }
+    } else {
+        document.getElementById('b2bText').textContent = 'No file chosen';
+        document.getElementById('b2bMsg').textContent = '';
+    }
+});
+
+document.getElementById('b2cFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const isValid = validateB2CFile(file);
+        if (!isValid) {
+            e.target.value = ''; // Clear invalid file input
+        }
+    } else {
+        document.getElementById('b2cText').textContent = 'No file chosen';
+        document.getElementById('b2cMsg').textContent = '';
+    }
+});
+
+document.getElementById('payoutFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const isValid = validatePayoutFile(file);
+        if (!isValid) {
+            e.target.value = ''; // Clear invalid file input
+        }
+    } else {
+        document.getElementById('payoutText').textContent = 'No file chosen';
+        document.getElementById('payoutMsg').textContent = '';
+    }
+});
+
+// FORM SUBMISSION
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    const b2bFile = document.getElementById('b2bFile').files[0];
+    const b2cFile = document.getElementById('b2cFile').files[0];
+    const payoutFile = document.getElementById('payoutFile').files[0];
+    
+    let hasValidFile = false;
+    
+    // Validate files
+    if (b2bFile) hasValidFile = validateB2BFile(b2bFile) || hasValidFile;
+    if (b2cFile) hasValidFile = validateB2CFile(b2cFile) || hasValidFile;
+    if (payoutFile) hasValidFile = validatePayoutFile(payoutFile) || hasValidFile;
+    
+    if (!hasValidFile) {
+        e.preventDefault();
+        showAlert('Please select at least one valid file to upload', 'error');
+        return;
+    }
+    
+    // Show loading state
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Starting Import...';
+    submitBtn.disabled = true;
+    
+    // Let the form submit normally - backend will redirect to progress page
+});
+
+// Add this JavaScript to handle real-time log updates
+
+let autoRefresh = true;
+let refreshInterval;
+
+// Function to fetch and display recent logs
+async function fetchRecentLogs() {
+    try {
+        const response = await fetch('/api/recent-logs');
+        const logs = await response.json();
+        
+        const logsContainer = document.getElementById('recentLogs');
+        
+        if (logs.length === 0) {
+            logsContainer.innerHTML = `
+                <div class="log-entry">
+                    <div class="log-time">--:--:--</div>
+                    <div class="log-message">No recent import activity. Upload files to see live logs here.</div>
+                </div>
+            `;
+            return;
+        }
+        
+        logsContainer.innerHTML = '';
+        
+        logs.forEach(log => {
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            const timestamp = new Date(log.timestamp).toLocaleTimeString();
+            const logLevel = log.level.toLowerCase();
+            
+            logEntry.innerHTML = `
+                <div class="log-time">${timestamp}</div>
+                <div class="log-message log-${logLevel}">${log.message}</div>
             `;
             
-            // Add to flash messages container
-            const flashContainer = document.querySelector('.flash-messages');
-            flashContainer.appendChild(toast);
-            
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                setTimeout(() => toast.remove(), 500);
-            }, 5000);
-        }
+            logsContainer.appendChild(logEntry);
+        });
         
-        function getIcon(type) {
-            const icons = {
-                'success': 'check-circle',
-                'danger': 'exclamation-circle',
-                'warning': 'exclamation-triangle',
-                'info': 'info-circle'
-            };
-            return icons[type] || 'info-circle';
-        }
+        // Auto-scroll to bottom
+        logsContainer.scrollTop = logsContainer.scrollHeight;
+        
+    } catch (error) {
+        console.error('Error fetching logs:', error);
+    }
+}
+
+// Function to refresh logs
+function refreshLogs() {
+    const refreshBtn = document.querySelector('.btn-refresh');
+    refreshBtn.disabled = true;
+    refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing';
+    
+    fetchRecentLogs().finally(() => {
+        setTimeout(() => {
+            refreshBtn.disabled = false;
+            refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
+        }, 1000);
     });
+}
+
+// Auto-refresh functionality
+function startAutoRefresh() {
+    if (autoRefresh) {
+        refreshInterval = setInterval(fetchRecentLogs, 5000); // Refresh every 5 seconds
+        document.querySelector('.logs-section').classList.add('auto-refresh-active');
+    }
+}
+
+function stopAutoRefresh() {
+    clearInterval(refreshInterval);
+    document.querySelector('.logs-section').classList.remove('auto-refresh-active');
+}
+
+// Toggle auto-refresh
+function toggleAutoRefresh() {
+    autoRefresh = !autoRefresh;
+    if (autoRefresh) {
+        startAutoRefresh();
+    } else {
+        stopAutoRefresh();
+    }
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    fetchRecentLogs();
+    startAutoRefresh();
+    
+    // Also fetch logs when coming back from progress page
+    if (performance.navigation.type === 1) { // Page reload
+        setTimeout(fetchRecentLogs, 1000);
+    }
+});
+
+// Clean up on page unload
+window.addEventListener('beforeunload', function() {
+    stopAutoRefresh();
+});
 </script>
 {% endblock %}

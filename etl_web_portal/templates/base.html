@@ -115,6 +115,84 @@
             background: var(--primary-dark);
             transform: translateY(-2px);
         }
+
+        /* Add these base styles for upload pages */
+        .upload-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            min-height: 100vh;
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .upload-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .upload-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .upload-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #1e293b;
+            font-weight: 700;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 15px;
+        }
+
+        .navigation-links {
+            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link, .logout-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+            padding: 12px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+        }
+
+        .nav-link:hover, .logout-link:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body>
