@@ -40,8 +40,6 @@ Thumbs.db
 
 # Ignore specific project files
 date_table.py
-sisense_dashboard.py
-sisense_tester.py
 
 # Ignore local environment and secret configs
 *.env
