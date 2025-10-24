@@ -2,55 +2,82 @@
   {
     "filename": "MTR_B2B-APRIL-2024-A21X0IZWUD6LPQ.csv",
     "type": "b2b",
-    "import_id": "fc8b1389",
-    "first_imported": "2025-10-22T14:15:53.668420",
-    "last_imported": "2025-10-22T14:15:53.668441",
+    "import_id": "e5fa01b0",
+    "first_imported": "2025-10-24T13:57:15.392805",
+    "last_imported": "2025-10-24T13:57:15.392840",
     "status": "staging_imported",
     "staging_table": "stg_amz_b2b"
   },
   {
     "filename": "MTR_B2C-APRIL-2024-A21X0IZWUD6LOQ.csv",
     "type": "b2c",
-    "import_id": "fc8b1389",
-    "first_imported": "2025-10-22T14:16:37.742944",
-    "last_imported": "2025-10-22T14:16:37.742965",
+    "import_id": "e5fa01b0",
+    "first_imported": "2025-10-24T13:57:56.546101",
+    "last_imported": "2025-10-24T13:57:56.546125",
     "status": "staging_imported",
     "staging_table": "stg_amz_b2c"
   },
   {
     "filename": "AMZ_Payout_Apr_2024.csv",
     "type": "payout",
-    "import_id": "fc8b1389",
-    "first_imported": "2025-10-22T14:17:31.320580",
-    "last_imported": "2025-10-22T14:17:31.320600",
+    "import_id": "e5fa01b0",
+    "first_imported": "2025-10-24T13:59:10.121124",
+    "last_imported": "2025-10-24T13:59:10.121162",
     "status": "staging_imported",
     "staging_table": "stg_amz_payout"
   },
   {
     "filename": "MTR_B2B-MAY-2024-A21X0IZWUD6LOQ.csv",
     "type": "b2b",
-    "import_id": "5cba8276",
-    "first_imported": "2025-10-22T14:23:12.357675",
-    "last_imported": "2025-10-22T14:23:12.357703",
+    "import_id": "bac35a7c",
+    "first_imported": "2025-10-24T14:50:11.317027",
+    "last_imported": "2025-10-24T14:50:11.317044",
     "status": "staging_imported",
     "staging_table": "stg_amz_b2b"
   },
   {
+    "filename": "MTR_B2C-MAY-2024-A21X0IZWUD6LOQ.csv",
+    "type": "b2c",
+    "import_id": "bac35a7c",
+    "first_imported": "2025-10-24T14:51:41.467568",
+    "last_imported": "2025-10-24T14:51:41.467592",
+    "status": "staging_imported",
+    "staging_table": "stg_amz_b2c"
+  },
+  {
     "filename": "2024MayMonthlyUnifiedTransaction.csv",
     "type": "payout",
-    "import_id": "5cba8276",
-    "first_imported": "2025-10-22T14:24:04.874803",
-    "last_imported": "2025-10-22T14:24:04.874836",
+    "import_id": "bac35a7c",
+    "first_imported": "2025-10-24T14:53:36.154166",
+    "last_imported": "2025-10-24T14:53:36.154186",
     "status": "staging_imported",
     "staging_table": "stg_amz_payout"
   },
   {
-    "filename": "MTR_B2C-MAY-2024-A21X0IZWUD6LOQ.csv",
+    "filename": "MTR_B2B-JUNE-2024-A21X0IZWUD6LOQ.csv",
+    "type": "b2b",
+    "import_id": "48151d53",
+    "first_imported": "2025-10-24T15:16:35.514090",
+    "last_imported": "2025-10-24T15:16:35.514119",
+    "status": "staging_imported",
+    "staging_table": "stg_amz_b2b"
+  },
+  {
+    "filename": "MTR_B2C-JUNE-2024-A21X0IZWUD6LOQ.csv",
     "type": "b2c",
-    "import_id": "a718e5ef",
-    "first_imported": "2025-10-22T14:31:08.423119",
-    "last_imported": "2025-10-22T14:31:08.423140",
+    "import_id": "48151d53",
+    "first_imported": "2025-10-24T15:17:38.243334",
+    "last_imported": "2025-10-24T15:17:38.243373",
     "status": "staging_imported",
     "staging_table": "stg_amz_b2c"
+  },
+  {
+    "filename": "2024JunMonthlyUnifiedTransaction.csv",
+    "type": "payout",
+    "import_id": "48151d53",
+    "first_imported": "2025-10-24T15:18:50.782722",
+    "last_imported": "2025-10-24T15:18:50.782825",
+    "status": "staging_imported",
+    "staging_table": "stg_amz_payout"
   }
 ]

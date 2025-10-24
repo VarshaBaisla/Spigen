@@ -72,6 +72,14 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_REQUEST_SIZE'] = 500 * 1024 * 1024  # 500MB
 app.config['REQUEST_TIMEOUT'] = 3600  # 1 hour timeout for large uploads
 
+#-----------------------------  LOGIN DETAILS-------------------
+
+VALID_USERS = {
+    "admin": "admin123", #username:password
+    "atyab@orbis.com": "Admin@123456",
+    "user": "password123"
+}
+
 # ---------- DATABASE CONFIG ----------
 DB_CONFIG = {
     "host": "localhost",
@@ -390,7 +398,6 @@ class ProgressTracker:
         
         return True, reconcilable_months
     
-
     def _find_reconcilable_months_for_uploaded(self, uploaded_months):
         """Find which uploaded months have complete data for reconciliation"""
         try:
@@ -421,6 +428,41 @@ class ProgressTracker:
         finally:
             if conn:
                 conn.close()
+    
+    def should_run_reconciliation_optimized(self, import_batch_id):
+        """Check if reconciliation should run - OPTIMIZED VERSION"""
+        try:
+            current_import = self.active_imports.get(import_batch_id, {})
+            uploaded_files = [f['type'] for f in current_import.get('files', [])]
+            uploaded_months = current_import.get('uploaded_months', [])
+            
+            # Only run reconciliation if we have BOTH sales and payout data
+            has_sales = any(ft in uploaded_files for ft in ['b2b', 'b2c'])
+            has_payout = 'payout' in uploaded_files
+            
+            if not (has_sales and has_payout):
+                app.logger.info(f"[{import_batch_id}] Skipping reconciliation - missing files. Sales: {has_sales}, Payout: {has_payout}")
+                return False, "Missing sales or payout data"
+            
+            # Check if we have complete data for any month
+            reconcilable_months = self._find_reconcilable_months_for_uploaded(uploaded_months)
+            
+            if not reconcilable_months:
+                app.logger.info(f"[{import_batch_id}] Skipping reconciliation - no complete months found")
+                return False, "No months with complete B2B+B2C+Payout data"
+            
+            # Limit to most recent month to avoid processing too much history
+            target_month = max(reconcilable_months) if reconcilable_months else None
+            
+            if target_month:
+                app.logger.info(f"[{import_batch_id}] Reconciliation approved for month: {target_month}")
+                return True, [target_month]
+            else:
+                return False, "No suitable month found"
+                
+        except Exception as e:
+            app.logger.error(f"[{import_batch_id}] Error in optimized reconciliation check: {e}")
+            return False, f"Error: {str(e)}"
 
     def _extract_months_from_files(self, files_to_process):
         """Extract month-year from uploaded files"""
@@ -524,23 +566,52 @@ class ProgressTracker:
         return None
 
     def _run_reconciliation_for_month(self, month_year, import_batch_id):
-        """Run reconciliation for a specific month-year with enhanced progress tracking"""
+        """Run reconciliation for a specific month-year with timeout protection"""
         try:
             app.logger.info(f"Running reconciliation for month: {month_year}")
             start_time = datetime.now()
             
-            # Update progress to show reconciliation is starting
-            self._update_progress(import_batch_id, f'Starting reconciliation for {month_year}...', 85)
-            self._add_log(import_batch_id, f'Reconciliation started for {month_year}. Processing historical data...', 'info')
+            # Update progress with timeout information
+            self._update_progress(import_batch_id, 
+                                f'Starting reconciliation for {month_year}...', 
+                                85)
+            self._add_log(import_batch_id, 
+                        f'Reconciliation started for {month_year}. This may take 10-30 minutes for large datasets.', 
+                        'info')
             
             conn = get_db_connection()
             with conn.cursor() as cur:
-                # SET HIGHER TIMEOUT FOR RECONCILIATION
-                cur.execute("SET statement_timeout = 3600000;")  # 60 minutes
-                cur.execute("SET lock_timeout = 3600000;")  
+                # SET OPTIMIZED TIMEOUTS
+                cur.execute("SET statement_timeout = 1800000;")  # 30 minutes
+                cur.execute("SET lock_timeout = 1800000;")  
+                cur.execute("SET idle_in_transaction_session_timeout = 1800000;")
                 
                 # Update progress before calling the procedure
-                self._update_progress(import_batch_id, f'Running comprehensive reconciliation (includes historical data matching)...', 87)
+                self._update_progress(import_batch_id, 
+                                    f'Running comprehensive reconciliation (processing historical data)...', 
+                                    87)
+                
+                # Add intermediate progress updates during long-running operation
+                def progress_monitor():
+                    time_elapsed = 0
+                    while time_elapsed < 1800:  # 30 minutes max
+                        time.sleep(30)  # Check every 30 seconds
+                        time_elapsed += 30
+                        
+                        # Update progress to show it's still running
+                        if time_elapsed % 60 == 0:  # Every minute
+                            minutes = time_elapsed // 60
+                            self._add_log(import_batch_id, 
+                                        f'Reconciliation in progress... {minutes} minutes elapsed', 
+                                        'info')
+                        
+                        # Check for cancellation
+                        if self.is_cancelled(import_batch_id):
+                            break
+                
+                # Start progress monitor in separate thread
+                monitor_thread = threading.Thread(target=progress_monitor, daemon=True)
+                monitor_thread.start()
                 
                 # Call the reconciliation procedure
                 cur.execute("CALL spigen.process_reconciliation_opt()")
@@ -552,13 +623,17 @@ class ProgressTracker:
             seconds = int(processing_time % 60)
             
             # Update progress after successful reconciliation
-            self._update_progress(import_batch_id, f'Reconciliation completed for {month_year}', 90)
-            self._add_log(import_batch_id, f'Reconciliation completed for {month_year} in {minutes}m {seconds}s', 'success')
+            self._update_progress(import_batch_id, 
+                                f'Reconciliation completed for {month_year}', 
+                                90)
+            self._add_log(import_batch_id, 
+                        f'Reconciliation completed for {month_year} in {minutes}m {seconds}s', 
+                        'success')
             app.logger.info(f"Reconciliation completed successfully for month: {month_year} in {minutes}m {seconds}s")
             return {'success': True}
                 
         except psycopg2.errors.QueryCanceled:
-            error_msg = f"Reconciliation TIMEOUT for {month_year}: Statement exceeded 60 minutes"
+            error_msg = f"Reconciliation TIMEOUT for {month_year}: Statement exceeded 30 minutes"
             app.logger.error(f"[{import_batch_id}] {error_msg}")
             return {'success': False, 'error': error_msg}
         
@@ -1610,13 +1685,12 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         
-        if username and password:
+        if username in VALID_USERS and VALID_USERS[username] == password:
             session['user'] = username
             flash('Login successful!', 'success')
             return redirect(url_for('upload'))
         else:
-            flash('Please enter both username and password', 'danger')
-    
+            flash('Invalid credentials. Try again.', "danger")
     return render_template('login.html')
 
 # ---------- ERROR HANDLERS ----------
@@ -1773,6 +1847,63 @@ def import_progress():
                          import_data=import_data,
                          active_imports=list(progress_tracker.active_imports.keys()),
                          now=datetime.now())
+def check_database_performance():
+    """Check if required indexes exist and provide optimization suggestions"""
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cur:
+            
+            # Check for critical indexes
+            cur.execute("""
+                SELECT 
+                    tablename,
+                    indexname,
+                    indexdef
+                FROM pg_indexes 
+                WHERE schemaname = 'spigen'
+                AND tablename IN ('tgt_sales', 'tgt_payout', 'tgt_reconciliation', 'unmatched_orders')
+                ORDER BY tablename, indexname;
+            """)
+            
+            existing_indexes = cur.fetchall()
+            app.logger.info("Existing indexes for reconciliation:")
+            for index in existing_indexes:
+                app.logger.info(f"  {index[0]}.{index[1]}")
+            
+            # Check table sizes
+            cur.execute("""
+                SELECT 
+                    table_name,
+                    PG_SIZE_PRETTY(PG_TOTAL_RELATION_SIZE('spigen.' || table_name)) as size
+                FROM information_schema.tables 
+                WHERE table_schema = 'spigen'
+                AND table_name IN ('tgt_sales', 'tgt_payout')
+            """)
+            
+            table_sizes = cur.fetchall()
+            app.logger.info("Table sizes:")
+            for table, size in table_sizes:
+                app.logger.info(f"  {table}: {size}")
+                
+        return existing_indexes, table_sizes
+        
+    except Exception as e:
+        app.logger.error(f"Error checking database performance: {e}")
+        return [], []
+    finally:
+        if conn:
+            conn.close()
+
+# Call this during startup
+# Call this during startup - FIXED for newer Flask versions
+@app.before_request
+def initialize_performance_checks():
+    """Run performance checks on first request"""
+    # Check if we've already initialized
+    if not hasattr(app, 'performance_checks_done'):
+        indexes, sizes = check_database_performance()
+        app.logger.info("Database performance initialization completed")
+        app.performance_checks_done = True
 
 @app.route('/logs')
 def view_logs():

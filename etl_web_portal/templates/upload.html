@@ -53,6 +53,9 @@
                                 </label>
                                 <div class="selected-file-name">
                                     <div class="file-status-default" id="b2bText">No file chosen</div>
+                                    <button type="button" class="file-cancel-btn" id="b2bCancel" style="display: none;">
+                                        <i class="fas fa-times"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="file-validation-status" id="b2bMsg"></div>
@@ -80,6 +83,9 @@
                                 </label>
                                 <div class="selected-file-name">
                                     <div class="file-status-default" id="b2cText">No file chosen</div>
+                                    <button type="button" class="file-cancel-btn" id="b2cCancel" style="display: none;">
+                                        <i class="fas fa-times"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="file-validation-status" id="b2cMsg"></div>
@@ -107,6 +113,9 @@
                                 </label>
                                 <div class="selected-file-name">
                                     <div class="file-status-default" id="payoutText">No file chosen</div>
+                                    <button type="button" class="file-cancel-btn" id="payoutCancel" style="display: none;">
+                                        <i class="fas fa-times"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="file-validation-status" id="payoutMsg"></div>
@@ -314,20 +323,12 @@
     margin-top: 15px;
 }
 
-.file-input-wrapper input {
-    position: absolute;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-    z-index: 2;
-}
-
 .file-input-line {
     display: flex;
     align-items: center;
     gap: 15px;
     width: 100%;
+    position: relative;
 }
 
 .file-input-label {
@@ -346,6 +347,8 @@
     font-size: 0.95rem;
     flex-shrink: 0;
     min-width: 140px;
+    position: relative;
+    z-index: 2;
 }
 
 .file-input-label:hover {
@@ -369,7 +372,10 @@
     min-height: 48px;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
 }
 
 .file-status-default {
@@ -377,6 +383,46 @@
     color: #64748b;
     font-weight: 500;
     font-family: 'Courier New', monospace;
+    flex: 1;
+}
+
+/* Cancel Button Styles - FIXED */
+.file-cancel-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    z-index: 10;
+    position: relative;
+}
+
+.file-cancel-btn:hover {
+    background: #dc2626;
+    transform: scale(1.1);
+}
+
+.file-cancel-btn i {
+    font-size: 0.8rem;
+}
+
+/* Make sure the file input only covers the choose file button area */
+.file-input-wrapper input {
+    position: absolute;
+    opacity: 0;
+    width: 140px;
+    height: 48px;
+    cursor: pointer;
+    z-index: 3;
+    left: 0;
+    top: 0;
 }
 
 /* Validation Message Styles - More Compact */
@@ -565,7 +611,12 @@
     
     .selected-file-name {
         width: 100%;
-        justify-content: center;
+        justify-content: space-between;
+    }
+    
+    .file-input-wrapper input {
+        width: 100%;
+        left: 0;
     }
     
     .submit-btn {
@@ -582,7 +633,6 @@
 </style>
 
 <script>
-
 // Add CSS for the override button
 const overrideStyle = `
 .btn-override {
@@ -617,7 +667,6 @@ const SESSION_UPLOADED_KEY = 'sessionUploadedFiles';
 
 // Initialize session tracking
 function initializeSessionTracking() {
-    // Get previously uploaded files from session storage
     const sessionUploaded = JSON.parse(sessionStorage.getItem(SESSION_UPLOADED_KEY) || '[]');
     sessionUploaded.forEach(file => {
         uploadedFiles.add(file);
@@ -628,13 +677,9 @@ function initializeSessionTracking() {
 // Add file to session tracking
 function addToSessionTracking(fileName) {
     uploadedFiles.add(fileName);
-    
-    // Update session storage
     const sessionUploaded = Array.from(uploadedFiles);
     sessionStorage.setItem(SESSION_UPLOADED_KEY, JSON.stringify(sessionUploaded));
-    
     console.log('Added to session tracking:', fileName);
-    console.log('Current session files:', sessionUploaded);
 }
 
 // Clear session tracking (useful for logout)
@@ -643,18 +688,15 @@ function clearSessionTracking() {
     sessionStorage.removeItem(SESSION_UPLOADED_KEY);
     console.log('Session tracking cleared');
 }
-// Function to clear session tracking (useful after cancelled imports)
+
+// Function to clear session tracking for specific files
 function clearSessionTrackingForFiles(fileNames) {
     fileNames.forEach(fileName => {
         uploadedFiles.delete(fileName);
     });
-    
-    // Update session storage
     const sessionUploaded = Array.from(uploadedFiles);
     sessionStorage.setItem(SESSION_UPLOADED_KEY, JSON.stringify(sessionUploaded));
-    
     console.log('Cleared session tracking for files:', fileNames);
-    console.log('Remaining session files:', sessionUploaded);
 }
 
 // Function to force allow file upload (admin override)
@@ -675,7 +717,6 @@ async function forceAllowFileUpload(filename, fileType) {
         
         if (data.success) {
             showAlert(`File ${filename} can now be uploaded again`, 'success');
-            // Also clear from session tracking
             clearSessionTrackingForFiles([filename]);
             return true;
         } else {
@@ -688,7 +729,6 @@ async function forceAllowFileUpload(filename, fileType) {
     }
 }
 
-
 // Check if file is duplicate in current session
 function isDuplicateInSession(fileName) {
     const isDuplicate = uploadedFiles.has(fileName);
@@ -696,14 +736,13 @@ function isDuplicateInSession(fileName) {
     return isDuplicate;
 }
 
-// Function to check if file is already imported to staging table (this would typically call your backend)
+// Function to check if file is already imported to staging table
 async function checkFileImported(fileName, fileType) {
     try {
-        // Make API call to check if file has been imported to staging table
         const response = await fetch(`/api/check-staging-import?filename=${encodeURIComponent(fileName)}&type=${fileType}`);
         if (response.ok) {
             const data = await response.json();
-            return data.imported === true; // Returns true if file is already in staging table
+            return data.imported === true;
         }
     } catch (error) {
         console.error('Error checking file import status:', error);
@@ -716,11 +755,9 @@ async function checkFileImported(fileName, fileType) {
     );
 }
 
-// Function to mark file as imported to staging table (this would typically be called by your backend)
+// Function to mark file as imported to staging table
 function markFileAsImported(fileName, fileType) {
     const storedImported = JSON.parse(localStorage.getItem('importedFiles') || '[]');
-    
-    // Check if file is already marked as imported
     const alreadyImported = storedImported.some(file => file.name === fileName && file.type === fileType);
     if (!alreadyImported) {
         storedImported.push({
@@ -760,15 +797,71 @@ function showAlert(message, type = 'error') {
     }, 5000);
 }
 
+// Function to clear file selection - FIXED VERSION
+function clearFileSelection(fileType) {
+    const fileInput = document.getElementById(`${fileType}File`);
+    const fileText = document.getElementById(`${fileType}Text`);
+    const fileMsg = document.getElementById(`${fileType}Msg`);
+    const cancelBtn = document.getElementById(`${fileType}Cancel`);
+    
+    // Clear the file input
+    if (fileInput) {
+        fileInput.value = '';
+        
+        // For IE and older browsers
+        if (fileInput.value) {
+            fileInput.type = 'text';
+            fileInput.type = 'file';
+        }
+    }
+    
+    // Reset the display
+    if (fileText) {
+        fileText.textContent = 'No file chosen';
+        fileText.style.color = '#64748b';
+    }
+    
+    // Clear validation message
+    if (fileMsg) {
+        fileMsg.textContent = '';
+        fileMsg.className = 'file-validation-status';
+    }
+    
+    // Hide cancel button
+    if (cancelBtn) {
+        cancelBtn.style.display = 'none';
+    }
+    
+    // Clear from session tracking if it was added
+    const fileName = fileText?.dataset?.originalName;
+    if (fileName) {
+        clearSessionTrackingForFiles([fileName]);
+        delete fileText.dataset.originalName;
+    }
+    
+    // Trigger a change event to update any listeners
+    if (fileInput) {
+        const event = new Event('change', { bubbles: true });
+        fileInput.dispatchEvent(event);
+    }
+    
+    console.log(`Cleared ${fileType} file selection`);
+}
+
+// Function to update file display with cancel button
+function updateFileDisplay(fileType, fileName) {
+    const fileText = document.getElementById(`${fileType}Text`);
+    const cancelBtn = document.getElementById(`${fileType}Cancel`);
+    
+    fileText.textContent = fileName;
+    fileText.dataset.originalName = fileName;
+    cancelBtn.style.display = 'flex';
+}
+
 // VALIDATION PATTERNS
 const validationPatterns = {
-    // B2B: MTR_B2B-MONTH-YEAR.csv or MTR_B2B-MONTH-YEAR-UNIQUEID.csv
     b2b: /^MTR_B2B-(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)-\d{4}(-[A-Z0-9]+)?\.csv$/i,
-    
-    // B2C: MTR_B2C-MONTH-YEAR.csv or MTR_B2C-MONTH-YEAR-UNIQUEID.csv  
     b2c: /^MTR_B2C-(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)-\d{4}(-[A-Z0-9]+)?\.csv$/i,
-    
-    // Payout: YYYYMMMonthlyUnifiedTransaction.csv or PLATFORM_Payout_Month_Year.csv
     payout: /^(\d{4}[A-Z]{3}MonthlyUnifiedTransaction|(AMZ|JIO)_Payout_(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)_\d{4})\.csv$/i
 };
 
@@ -776,13 +869,14 @@ const validationPatterns = {
 async function validateB2BFile(file, isFormSubmission = false) {
     const text = document.getElementById('b2bText');
     const msg = document.getElementById('b2bMsg');
+    const cancelBtn = document.getElementById('b2bCancel');
     
     // Reset message
     msg.textContent = '';
     msg.className = 'file-validation-status';
     
     if (file) {
-        text.textContent = file.name;
+        updateFileDisplay('b2b', file.name);
         
         // Check for CSV
         if (!file.name.toLowerCase().endsWith('.csv')) {
@@ -816,7 +910,6 @@ async function validateB2BFile(file, isFormSubmission = false) {
         }
         
         // Check if file is already imported to staging table
-        // Check if file is already imported to staging table
         const isImported = await checkFileImported(file.name, 'b2b');
         if (isImported) {
             msg.textContent = '⚠️ File already imported to staging table';
@@ -835,8 +928,7 @@ async function validateB2BFile(file, isFormSubmission = false) {
             return false;
         }
         
-        // Check for duplicate file in current session - EXACT FILENAME MATCH
-        // Only check for duplicates during file selection, not during form submission
+        // Check for duplicate file in current session
         if (!isFormSubmission && isDuplicateInSession(file.name)) {
             msg.textContent = 'File already uploaded in this session';
             msg.classList.add('warning');
@@ -850,6 +942,7 @@ async function validateB2BFile(file, isFormSubmission = false) {
         return true;
     } else {
         text.textContent = 'No file chosen';
+        cancelBtn.style.display = 'none';
         return false;
     }
 }
@@ -857,13 +950,14 @@ async function validateB2BFile(file, isFormSubmission = false) {
 async function validateB2CFile(file, isFormSubmission = false) {
     const text = document.getElementById('b2cText');
     const msg = document.getElementById('b2cMsg');
+    const cancelBtn = document.getElementById('b2cCancel');
     
     // Reset message
     msg.textContent = '';
     msg.className = 'file-validation-status';
     
     if (file) {
-        text.textContent = file.name;
+        updateFileDisplay('b2c', file.name);
         
         // Check for CSV
         if (!file.name.toLowerCase().endsWith('.csv')) {
@@ -905,8 +999,7 @@ async function validateB2CFile(file, isFormSubmission = false) {
             return false;
         }
         
-        // Check for duplicate file in current session - EXACT FILENAME MATCH
-        // Only check for duplicates during file selection, not during form submission
+        // Check for duplicate file in current session
         if (!isFormSubmission && isDuplicateInSession(file.name)) {
             msg.textContent = 'File already uploaded in this session';
             msg.classList.add('warning');
@@ -920,6 +1013,7 @@ async function validateB2CFile(file, isFormSubmission = false) {
         return true;
     } else {
         text.textContent = 'No file chosen';
+        cancelBtn.style.display = 'none';
         return false;
     }
 }
@@ -927,13 +1021,14 @@ async function validateB2CFile(file, isFormSubmission = false) {
 async function validatePayoutFile(file, isFormSubmission = false) {
     const text = document.getElementById('payoutText');
     const msg = document.getElementById('payoutMsg');
+    const cancelBtn = document.getElementById('payoutCancel');
     
     // Reset message
     msg.textContent = '';
     msg.className = 'file-validation-status';
     
     if (file) {
-        text.textContent = file.name;
+        updateFileDisplay('payout', file.name);
         
         // Check for CSV
         if (!file.name.toLowerCase().endsWith('.csv')) {
@@ -968,8 +1063,7 @@ async function validatePayoutFile(file, isFormSubmission = false) {
             return false;
         }
         
-        // Check for duplicate file in current session - EXACT FILENAME MATCH
-        // Only check for duplicates during file selection, not during form submission
+        // Check for duplicate file in current session
         if (!isFormSubmission && isDuplicateInSession(file.name)) {
             msg.textContent = 'File already uploaded in this session';
             msg.classList.add('warning');
@@ -983,6 +1077,7 @@ async function validatePayoutFile(file, isFormSubmission = false) {
         return true;
     } else {
         text.textContent = 'No file chosen';
+        cancelBtn.style.display = 'none';
         return false;
     }
 }
@@ -991,40 +1086,68 @@ async function validatePayoutFile(file, isFormSubmission = false) {
 document.getElementById('b2bFile').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (file) {
-        const isValid = await validateB2BFile(file, false); // false = not form submission
+                const isValid = await validateB2BFile(file, false);
         if (!isValid) {
-            e.target.value = ''; // Clear invalid file input
+            // Keep file visible but invalid - user can cancel if needed
         }
     } else {
         document.getElementById('b2bText').textContent = 'No file chosen';
         document.getElementById('b2bMsg').textContent = '';
+        document.getElementById('b2bCancel').style.display = 'none';
     }
 });
 
 document.getElementById('b2cFile').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (file) {
-        const isValid = await validateB2CFile(file, false); // false = not form submission
+        const isValid = await validateB2CFile(file, false);
         if (!isValid) {
-            e.target.value = ''; // Clear invalid file input
+            // Keep file visible but invalid - user can cancel if needed
         }
     } else {
         document.getElementById('b2cText').textContent = 'No file chosen';
         document.getElementById('b2cMsg').textContent = '';
+        document.getElementById('b2cCancel').style.display = 'none';
     }
 });
 
 document.getElementById('payoutFile').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (file) {
-        const isValid = await validatePayoutFile(file, false); // false = not form submission
+        const isValid = await validatePayoutFile(file, false);
         if (!isValid) {
-            e.target.value = ''; // Clear invalid file input
+            // Keep file visible but invalid - user can cancel if needed
         }
     } else {
         document.getElementById('payoutText').textContent = 'No file chosen';
         document.getElementById('payoutMsg').textContent = '';
+        document.getElementById('payoutCancel').style.display = 'none';
     }
+});
+
+// CANCEL BUTTON EVENT HANDLERS - FIXED WITH EVENT PREVENTION
+document.getElementById('b2bCancel').addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    clearFileSelection('b2b');
+    showAlert('B2B file selection cancelled', 'info');
+});
+
+document.getElementById('b2cCancel').addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    clearFileSelection('b2c');
+    showAlert('B2C file selection cancelled', 'info');
+});
+
+document.getElementById('payoutCancel').addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    clearFileSelection('payout');
+    showAlert('Payout file selection cancelled', 'info');
 });
 
 // FORM SUBMISSION
@@ -1036,23 +1159,23 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
     let hasValidFile = false;
     let validFiles = [];
     
-    // Validate files and collect valid ones - pass true for form submission to skip duplicate check
+    // Validate files and collect valid ones
     if (b2bFile) {
-        const isValid = await validateB2BFile(b2bFile, true); // true = form submission
+        const isValid = await validateB2BFile(b2bFile, true);
         if (isValid) {
             hasValidFile = true;
             validFiles.push({ file: b2bFile, type: 'b2b' });
         }
     }
     if (b2cFile) {
-        const isValid = await validateB2CFile(b2cFile, true); // true = form submission
+        const isValid = await validateB2CFile(b2cFile, true);
         if (isValid) {
             hasValidFile = true;
             validFiles.push({ file: b2cFile, type: 'b2c' });
         }
     }
     if (payoutFile) {
-        const isValid = await validatePayoutFile(payoutFile, true); // true = form submission
+        const isValid = await validatePayoutFile(payoutFile, true);
         if (isValid) {
             hasValidFile = true;
             validFiles.push({ file: payoutFile, type: 'payout' });
@@ -1074,6 +1197,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
     
     // Show loading state
     const submitBtn = document.getElementById('submitBtn');
+    const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Starting Import...';
     submitBtn.disabled = true;
     
@@ -1091,19 +1215,123 @@ document.addEventListener('DOMContentLoaded', function() {
         importedFiles.add(file.name);
     });
     
+    // Check if there are any pre-selected files from page reload
+    checkAndDisplayExistingSelections();
+    
+    // Initialize drag and drop
+    setupDragAndDrop();
+    
     console.log('Page initialized. Session files:', Array.from(uploadedFiles));
     console.log('Imported files:', Array.from(importedFiles));
 });
 
-// Clear session tracking when user logs out (optional enhancement)
-// You can call this function when logout is clicked
-function prepareForLogout() {
-    clearSessionTracking();
-    console.log('Session tracking cleared for logout');
+// Function to check and display existing file selections
+function checkAndDisplayExistingSelections() {
+    const b2bFile = document.getElementById('b2bFile').files[0];
+    const b2cFile = document.getElementById('b2cFile').files[0];
+    const payoutFile = document.getElementById('payoutFile').files[0];
+    
+    if (b2bFile) {
+        updateFileDisplay('b2b', b2bFile.name);
+        validateB2BFile(b2bFile, false);
+    }
+    
+    if (b2cFile) {
+        updateFileDisplay('b2c', b2cFile.name);
+        validateB2CFile(b2cFile, false);
+    }
+    
+    if (payoutFile) {
+        updateFileDisplay('payout', payoutFile.name);
+        validatePayoutFile(payoutFile, false);
+    }
 }
 
+// Enhanced file drag and drop functionality
+function setupDragAndDrop() {
+    const fileInputs = ['b2bFile', 'b2cFile', 'payoutFile'];
+    
+    fileInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        const box = document.getElementById(inputId.replace('File', 'Box'));
+        
+        if (!box) return;
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            box.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            box.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            box.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            box.style.borderColor = '#3b82f6';
+            box.style.backgroundColor = '#f0f7ff';
+        }
+        
+        function unhighlight() {
+            box.style.borderColor = '#e2e8f0';
+            box.style.backgroundColor = '#f8fafc';
+        }
+        
+        box.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                input.files = files;
+                const event = new Event('change', { bubbles: true });
+                input.dispatchEvent(event);
+            }
+        }
+    });
+}
+
+// Utility function to clear all file selections
+function clearAllFileSelections() {
+    clearFileSelection('b2b');
+    clearFileSelection('b2c');
+    clearFileSelection('payout');
+    showAlert('All file selections cleared', 'info');
+}
+
+// Add a clear all button to the form
+function addClearAllButton() {
+    const submitSection = document.querySelector('.submit-section');
+    if (!submitSection) return;
+    
+    const clearAllBtn = document.createElement('button');
+    clearAllBtn.type = 'button';
+    clearAllBtn.className = 'btn btn-secondary';
+    clearAllBtn.innerHTML = '<i class="fas fa-times"></i> Clear All Files';
+    clearAllBtn.style.marginRight = '10px';
+    clearAllBtn.style.background = '#6b7280';
+    clearAllBtn.style.border = 'none';
+    clearAllBtn.style.padding = '12px 24px';
+    clearAllBtn.style.borderRadius = '8px';
+    clearAllBtn.style.color = 'white';
+    clearAllBtn.style.cursor = 'pointer';
+    clearAllBtn.onclick = clearAllFileSelections;
+    
+    submitSection.insertBefore(clearAllBtn, document.getElementById('submitBtn'));
+}
+
+// Add clear all button when page loads
+document.addEventListener('DOMContentLoaded', addClearAllButton);
+
 // Demo function to simulate file import to staging table (for testing)
-// In your backend, call markFileAsImported() when a file is successfully imported to staging
 function demoMarkFileAsImported(fileName, fileType) {
     markFileAsImported(fileName, fileType);
     showAlert(`Demo: File "${fileName}" marked as imported to staging table`, 'success');
@@ -1116,8 +1344,80 @@ function debugSessionState() {
     console.log('Session Storage:', sessionStorage.getItem(SESSION_UPLOADED_KEY));
     console.log('Imported Files (Persistent):', Array.from(importedFiles));
     console.log('Local Storage:', localStorage.getItem('importedFiles'));
+    
+    const b2bFile = document.getElementById('b2bFile').files[0];
+    const b2cFile = document.getElementById('b2cFile').files[0];
+    const payoutFile = document.getElementById('payoutFile').files[0];
+    
+    console.log('Current B2B File:', b2bFile ? b2bFile.name : 'None');
+    console.log('Current B2C File:', b2cFile ? b2cFile.name : 'None');
+    console.log('Current Payout File:', payoutFile ? payoutFile.name : 'None');
     console.log('==========================');
 }
+
+// Keyboard shortcuts for better UX
+document.addEventListener('keydown', function(e) {
+    // Ctrl + Shift + C to clear all files
+    if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+        e.preventDefault();
+        clearAllFileSelections();
+    }
+    
+    // Ctrl + Shift + D for debug info
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        debugSessionState();
+        showAlert('Debug information logged to console', 'info');
+    }
+});
+
+// Clear session tracking when user logs out
+function prepareForLogout() {
+    clearSessionTracking();
+    console.log('Session tracking cleared for logout');
+}
+
+// Export functions for external use
+window.uploadUtils = {
+    clearFileSelection,
+    clearAllFileSelections,
+    debugSessionState,
+    forceAllowFileUpload,
+    validateB2BFile,
+    validateB2CFile,
+    validatePayoutFile
+};
+
+// Enhanced file name display with truncation for long names
+function truncateFileName(fileName, maxLength = 30) {
+    if (fileName.length <= maxLength) return fileName;
+    const extension = fileName.split('.').pop();
+    const nameWithoutExt = fileName.slice(0, -(extension.length + 1));
+    const truncatedName = nameWithoutExt.slice(0, maxLength - extension.length - 3) + '...';
+    return truncatedName + '.' + extension;
+}
+
+// Update the updateFileDisplay function to use truncation
+const originalUpdateFileDisplay = updateFileDisplay;
+updateFileDisplay = function(fileType, fileName) {
+    const fileText = document.getElementById(`${fileType}Text`);
+    const cancelBtn = document.getElementById(`${fileType}Cancel`);
+    
+    const displayName = truncateFileName(fileName);
+    fileText.textContent = displayName;
+    fileText.title = fileName; // Show full name on hover
+    fileText.dataset.originalName = fileName;
+    cancelBtn.style.display = 'flex';
+};
+
+// Auto-clear session tracking after 1 hour (optional)
+setTimeout(() => {
+    console.log('Auto-clearing session tracking after 1 hour');
+    clearSessionTracking();
+}, 60 * 60 * 1000);
+
+// Final initialization check
+console.log('File upload system fully initialized with cancel buttons and session tracking');
 </script>
 
 {% endblock %}
